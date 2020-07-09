@@ -1,0 +1,627 @@
+descTerm
+"Airport; Aerodrome, terminal and gates"
+Amenity; ATM
+Amenity; Automatic number plate reader
+Amenity; Bandstand
+Amenity; BBQ point
+Amenity; Bicycle parking
+Amenity; Bike monitoring
+Amenity; Bike rental point
+Amenity; Boat mooring
+Amenity; Car wash
+Amenity; Clock
+Amenity; Dog walking park
+Amenity; Electric car charging point
+Amenity; Emergency phone
+Amenity; Fire hydrant
+Amenity; Flood defence
+Amenity; Fountain (decorative)
+Amenity; Free library
+Amenity; Fuel station
+Amenity; Garages and sheds
+Amenity; Grit bin
+Amenity; Information board
+Amenity; Low emissions zone signage
+Amenity; Milestones and stone markers
+Amenity; Outdoor seating
+Amenity; Park
+Amenity; Parking
+Amenity; Parking (entrance)
+Amenity; Parking meter
+Amenity; Piers and boardwalks
+Amenity; Post box
+Amenity; Public telephone or telephone box
+Amenity; Public toilets
+Amenity; Public trash bin
+Amenity; Real time passenger information display
+Amenity; Scenic viewpoint
+Amenity; Self-service parcel locker
+Amenity; Street art or art installation
+Amenity; Street lamp
+Amenity; Surveillance camera or CCTV
+Amenity; Toll booth
+Amenity; Transport timetable
+Amenity; Underground and multi-storey car parks
+Amenity; Warning siren
+Amenity; Water point
+Amenity; Waymarker
+Animal; Boarding
+Animal; Shelter and welfare
+Animal; Veterinarian
+Attractions
+Attractions; Amusement arcade
+Attractions; Aquarium
+Attractions; Betting shop
+Attractions; Bingo hall
+Attractions; Boathouse
+Attractions; Botanical garden
+Attractions; Bowling alley
+Attractions; Burlesque club
+Attractions; Caberet club
+Attractions; Casinos and gaming
+Attractions; Cinema
+Attractions; Comedy club
+Attractions; Escape room
+Attractions; Go Karting centre
+Attractions; Historic
+Attractions; Karaoke
+Attractions; Miniature railway
+Attractions; Multiplex
+Attractions; Museums and art galleries
+Attractions; Music or concert venue
+Attractions; Nightclub
+Attractions; Paintball
+Attractions; Pool hall
+Attractions; Sauna
+Attractions; Science centre
+Attractions; Sex industry
+Attractions; Soft play
+Attractions; Stripclubs and erotic dancing
+Attractions; Theatre
+Attractions; Trampoline park
+Attractions; Water and theme parks
+Attractions; Zoological garden
+Barrier
+Barrier; Bollard
+Barrier; Cycle
+Barrier; Height restriction
+Barrier; Wall
+Brownfield site
+Buildings; Archive
+Buildings; Childcare
+Buildings; Clinical science
+Buildings; Co-op
+Buildings; Council depot
+Buildings; Council offices
+Buildings; Courthouses
+Buildings; Depots
+Buildings; Education
+Buildings; Education centre
+Buildings; Environmental regulators and managers
+Buildings; Estate
+Buildings; Food centre
+Buildings; Government transport agencies
+Buildings; Headquarters
+Buildings; Laboratory
+Buildings; Lawyers and solicitors
+Buildings; Learned societies
+Buildings; Legal aid
+Buildings; Library
+Buildings; Lighthouse
+Buildings; Lighthouses
+Buildings; Lost property office
+Buildings; Nurseries and kindergartens
+Buildings; Political offices
+Buildings; Prison and offenders institutes
+Buildings; Public
+Buildings; Pumping station
+Buildings; Removal
+Buildings; Research
+Buildings; Scottish gas
+Buildings; Service
+Buildings; Supplier
+Buildings; Terminal
+Buildings; Transport police
+Buildings; Unspecified
+Business and commerce; Accountants and auditors
+Business and commerce; Administrative office
+Business and commerce; Advertising and graphic design
+Business and commerce; Agencies
+Business and commerce; Appliances
+Business and commerce; Architect
+Business and commerce; Architects and urban planners
+Business and commerce; Bank
+Business and commerce; Bank office
+Business and commerce; Banks and building societies
+Business and commerce; Business centres and managed / serviced offices
+Business and commerce; Business park
+Business and commerce; Chambers
+Business and commerce; Company office
+Business and commerce; Consultancy
+Business and commerce; Coworking office
+Business and commerce; Credit union
+Business and commerce; Defence agencies
+Business and commerce; Employment and recruitment agencies
+Business and commerce; Engineering
+Business and commerce; Finances and investment
+Business and commerce; Financial advice
+Business and commerce; Financial advisor
+Business and commerce; Insurance
+Business and commerce; Interior designers
+Business and commerce; Investment
+Business and commerce; Letting and estate agents
+Business and commerce; Money transfer and currency exchange
+Business and commerce; NGO
+Business and commerce; Office
+Business and commerce; Oil major
+Business and commerce; Online retailer
+Business and commerce; Pawnbrokers and money lenders
+Business and commerce; Product development
+Business and commerce; Production company
+Business and commerce; Property development and construction
+Business and commerce; Property management and maintenance
+Business and commerce; Public relations
+Business and commerce; Publishing
+Business and commerce; QUANGO
+Business and commerce; Recruitment
+Business and commerce; Research and development
+Business and commerce; Retail company offices
+Business and commerce; Retail conglomerate
+Business and commerce; Retail park
+Business and commerce; Safety and security
+Business and commerce; Surveying company
+Business and commerce; Tax advisor
+Business and commerce; Technology and software
+Business and commerce; Tourist information offices and tourist boards
+Business and commerce; Transport operator offices
+Business and commerce; Travel agency
+Business and commerce; Unspecified
+College
+Community centres
+Community centres; Breakfast &amp; after school clubs and youth centres
+"Community centres; Hall (Town, village or church)"
+Community centres; Social clubs
+Community centres; Youth organisations
+Council; Park and street care
+Creative spaces; Art studios and centres
+Creative spaces; Dance studios
+Creative spaces; Photo studios and photographers
+Creative spaces; Recording studios
+Electricity generation
+Electricity generation; Generator
+Electricity generation; Geothermal
+Electricity generation; Incinerator
+Electricity generation; Intermittent renewables
+Electricity generation; Power plant
+Electricity generation; Small and sustainable energy sources
+Electricity network; Cable (underground)
+Electricity network; Distribution cabinet
+Electricity network; Line (overhead)
+Electricity network; Pole
+Electricity network; Substation
+Electricity network; Tower
+Electricity network; Transition point
+Environmental management; Pest control
+Exhibition centres; Conference centres
+Exhibition centres; Events venue
+Exhibition centres; Ice rink
+Exhibition centres; Stadiums and arenas
+Food production and horticulture; Agriculture
+Food production and horticulture; Bee keeping
+Food production and horticulture; Dairy
+Food production and horticulture; Farming
+Food production and horticulture; Greenhouses and glasshouses
+Food production and horticulture; Horticulture
+Food production and horticulture; Livestock
+Food production and horticulture; Manufacturing
+Food production and horticulture; Orchard
+Food production and horticulture; Tree and plant nurseries
+Food retail; Bakery
+Food retail; Butcher
+Food retail; Cheesemonger
+Food retail; Confectionery
+Food retail; Convenience store
+Food retail; Delicatessan
+Food retail; Fish and wholesale
+Food retail; Greengrocer
+Food retail; Health
+Food retail; Patisserie and speciality cakes
+Food retail; Speciality and luxury goods
+Food retail; Supermarket
+Food retail; World foods
+Gas network; Administrative office
+Gas network; Node
+Gas network; Substation
+Gas network; Works
+Golf; Green
+Golf; Practice grounds
+Governance; Ambulance station
+Governance; Civic
+Governance; Community fire station
+Governance; Defence agencies
+Governance; Diplomacy
+Governance; Fire station
+Governance; General public
+Governance; Insurance
+Governance; Lifeboat station
+Governance; Overseas registration unit
+Governance; Parks police
+"Governance; Police agencies, offices and headquarters"
+Governance; Police garage
+Governance; Police stations
+Governance; Registry
+Governance; Standards agency
+Governance; Traffic wardens
+"Gyms &amp; sport, fitness and leisure centres"
+Healthcare; Alternative
+Healthcare; Blood bank
+Healthcare; Cosmetic and plastic surgery
+Healthcare; Dental
+Healthcare; General practice
+Healthcare; Hospice
+Healthcare; Hospital
+Healthcare; Hospital administration office
+Healthcare; Medical laboratory
+Healthcare; Mental health and counselling
+Healthcare; Optician
+Healthcare; Outpatient services
+Healthcare; Pharmacy
+Healthcare; Physiotherapy and massage
+Healthcare; Private
+Healthcare; Sexual health and family planning
+Healthcare; Specialist
+Healthcare; Walk-in clinic
+Historic; Artefact
+Historic; Building
+Historic; Castle
+Historic; Folly
+Historic; Fortifications
+Historic; Lighthouse
+Historic; Memorial
+Historic; Milestones and stone markers
+Historic; Mine
+Historic; Monuments and statues
+Historic; Plaque
+Historic; Police call box
+Historic; Quarry
+Historic; Railway
+Historic; Railway station or platform
+Historic; Residences
+Historic; Ruins and archaeological sites
+Historic; Ships and aircraft
+Historic; Tomb
+Historic; Unspecified
+Historic; War memorials and battlefields
+Hospitality; Apartments and serviced apartments
+Hospitality; Bar
+Hospitality; Cafe
+Hospitality; Cafes and coffee shops
+Hospitality; Camping
+Hospitality; Caterer
+Hospitality; Eateries and restaurants
+Hospitality; Fast food and takeaways
+Hospitality; Festivals and events management
+Hospitality; Guest house
+Hospitality; Hostel
+Hospitality; Hotels and motels
+Hospitality; Internet cafe
+Hospitality; Pub
+Industry; Builders merchant
+Industry; Coal yard
+Industry; Gas supply
+Industry; Industrial estate
+Industry; Manufacturing
+Industry; Materials
+Industry; Oil and petroleum supply
+Industry; Oil pipeline
+Industry; Pipeline
+Industry; Quarry
+Industry; Refinery
+Industry; Storage tank
+Industry; Unspecified
+Industry; Warehouse
+Industry; Wood
+Industry; Yards and storage
+Logistics; Administrative office
+Logistics; Courier
+Logistics; Depots and sorting offices
+Logistics; Distribution centre
+Logistics; Distribution centre (supermarket)
+Logistics; Post office
+Logistics; Unspecified
+Manufacturing; Blacksmiths and ironmongery
+Manufacturing; Bookbinder
+Manufacturing; Chemical works
+Manufacturing; Clothing
+Manufacturing; Confectioner
+"Manufacturing; Distilling, brewing and winemaking"
+Manufacturing; Factory and manufacturing
+Manufacturing; Framer
+Manufacturing; Glassblower
+Manufacturing; Industrials
+Manufacturing; Machine shop
+Manufacturing; Packaging
+Manufacturing; Potter
+Manufacturing; Safety and security
+Manufacturing; Sculptor
+Manufacturing; Signmaker
+Manufacturing; Stonemason
+Manufacturing; Vehicle
+Manufacturing; Watchmakers and jewlers
+Mental health facility; Healthcare
+Military; Administration
+Military; Barracks
+Military; Land
+Military; Parade grounds
+Military; Reserves
+Military; Training grounds
+Military; Unspecified
+Outdoor facility; Training grounds
+Outdoors and natural environment
+Outdoors and natural environment; Allotments and community gardens
+Outdoors and natural environment; Beach
+Outdoors and natural environment; Commons and gardens
+Outdoors and natural environment; Forest and woodland
+Outdoors and natural environment; Grass land
+Outdoors and natural environment; Meadow
+Outdoors and natural environment; Nature reserve
+Outdoors and natural environment; Planted area
+Outdoors and natural environment; Shrub land
+Outdoors and natural environment; Spring (water)
+Outdoors and natural environment; Tidal range and coastline
+Outdoors and natural environment; Tree
+Outdoors and natural environment; Tree and hedge rows
+Outdoors and natural environment; Tree or hedge row
+Outdoors and natural environment; Wetland
+Outdoors and natural environment; Wetland tidal flat
+plot
+Point of interest; Historic
+Point of interest; Information board
+Public transport; Bus station
+Public transport; Bus stop
+Public transport; Ferry terminals and marinas
+Public transport; Ferry terminals and marinas facilities
+Public transport; Helipad
+Public transport; Light rail stop
+Public transport; Rail station
+Public transport; Taxi office
+Public transport; Taxi rank
+Regeneration programme
+Religious sites and buildings
+Religious sites and buildings; Administrative building
+Religious sites and buildings; Cemeteries and graveyards
+Religious sites and buildings; Chaplaincy
+Religious sites and buildings; Convents and monasteries
+Religious sites and buildings; Missionary
+Religious sites and buildings; Place of worship
+Religious sites and buildings; Shrines and relics
+Residential
+Residential; Ambassador
+Residential; Apartments
+Residential; Harbour Master's House
+Residential; House boat
+Residential; Houses
+Residential; School house
+Residential; Student accomodation
+Residential; Supported housing
+Residential; Traveller
+Retail
+Retail; Alternative medicine
+Retail; Arts and crafts
+Retail; Auction house
+Retail; Audiovisual
+Retail; Baby care and maternity
+Retail; Beauty and cosmetics
+Retail; Bookshop
+Retail; Boutique
+Retail; Charitable organisation
+Retail; Charity shop
+Retail; Clothing
+Retail; Clothing accessories
+Retail; Department store
+Retail; Discount
+Retail; Electronics and household appliances
+Retail; Erotic and adult
+"Retail; Games, music and video"
+Retail; Garden
+Retail; Gifts and souvenir
+Retail; Healthcare
+Retail; Hobbies and skills development
+Retail; Home furnishing and homeware
+Retail; Home improvement and DIY
+Retail; Household and cleaning
+Retail; Industry bulk goods
+Retail; IT and software
+Retail; Market
+Retail; Off-licence
+Retail; Pet
+Retail; Printing and copying
+Retail; Safety and security
+Retail; Shopping centre
+Retail; Speciality and luxury goods
+Retail; Sports and outdoor
+Retail; Tickets
+Retail; Wholesale
+Road and rail maintenance
+School
+School; Infant
+School; Junior
+School; Middle
+School; Primary
+School; Secondary
+School; Senior
+School; Sixth form college
+Social facility
+Social facility; Careers advice
+Social facility; Charitable organisation offices or facilities
+Social facility; Children's centre
+Social facility; Citizens advice
+Social facility; Day care (not children)
+Social facility; Drug rehabilitation
+Social facility; Food bank
+"Social facility; Government, financial services"
+"Social facility; Government, homeless services"
+"Social facility; Government, social care / work"
+Social facility; Homecare service
+Social facility; Housing office
+Social facility; Immigration aid
+Social facility; Job centre
+Social facility; Resident's associations and housing co-operatives
+Social facility; Salvation Army
+Social facility; Supported housing
+Social facility; Trade and labour unions
+Social facility; Volunteer centre
+Sports and games; Activity centre
+Sports and games; Clubhouse
+Sports and games; Clubhouse (golf)
+Sports and games; Clubhouse (water sports)
+Sports and games; Clubhouse and facilities
+Sports and games; Clubhouse and outdoor facility
+Sports and games; Clubhouse and outdoor facility (golf)
+Sports and games; Clubhouse and outdoor solid facility
+Sports and games; Fitness stations and outdoor gyms
+"Sports and games; Gyms &amp; sport, fitness and leisure centres"
+Sports and games; Horse riding centres
+Sports and games; Horse stables and paddocks
+Sports and games; Indoor facility
+Sports and games; Indoor facility (climbing)
+Sports and games; Indoor playground
+Sports and games; Multi
+Sports and games; Outdoor facility
+Sports and games; Outdoor facility (golf)
+Sports and games; Outdoor playground
+Sports and games; Outdoor solid facility
+Sports and games; Racing and motor sport
+Sports and games; Recreation ground
+Sports and games; Swimming pool
+Telecommunications
+Telecommunications; Broadcasting studio
+Telecommunications; Data centre
+Telecommunications; Exchange
+Telecommunications; Office
+Telecommunications; Relay station
+Telecommunications; Retail
+Telecommunications; Telephone exchanges
+Telecommunications; Tower
+Trades and services; Animal grooming
+Trades and services; Beauty industry
+Trades and services; Builder
+Trades and services; Business
+Trades and services; Carpenter
+Trades and services; Caterer
+Trades and services; Chauffeur company
+Trades and services; Cleaner
+Trades and services; Death care
+Trades and services; Dry cleaning and laundrette
+Trades and services; Electrician
+Trades and services; Electronics repair
+Trades and services; Exteriors
+Trades and services; Furniture repair
+Trades and services; Gardener
+Trades and services; Glazing
+Trades and services; Home removal
+Trades and services; Interiors
+Trades and services; Locksmiths and cobblers
+Trades and services; Mobile caterer
+Trades and services; Plumbing and HVAC
+Trades and services; Safety and security
+Trades and services; Security
+Trades and services; Speciality and luxury
+Trades and services; Storage facility
+Trades and services; Tailor
+Trades and services; Telecoms
+Trades and services; Tool and equipment hire
+Trades and services; Upholstery
+Traffic crossings; Bicycle
+Traffic crossings; Controlled / signalled
+Traffic crossings; Ford
+Traffic crossings; Level crossing
+Traffic crossings; Uncontrolled
+Traffic crossings; Unspecified
+Traffic management; Air traffic control
+Traffic management; Calming
+Traffic management; Control centre
+"Traffic management; Mini roundabout, turning circles and loops"
+Traffic management; Mirror
+Traffic management; Navigation aids and landing lights
+Traffic management; Roundabout
+Traffic management; Signage
+Traffic management; Speed camera
+Traffic management; Switches and signalling
+Traffic management; Traffic camera (live)
+Training; Beauty school
+Training; Cooking
+Training; Driving schools and test centres
+Training; Language school
+Training; Meeting and training space
+Training; Occupational
+Training; Occupational and networking
+Training; Private tuition (children)
+Training; School of performing arts
+"Transport infrastructure; Airport apron, runways and taxiways"
+Transport infrastructure; Bridge
+Transport infrastructure; Check points and weighbridges
+Transport infrastructure; Cycle path
+Transport infrastructure; Funicular rail
+Transport infrastructure; High speed rail
+Transport infrastructure; Light rail
+Transport infrastructure; Monorail
+Transport infrastructure; Motorway
+Transport infrastructure; Passageways and tunnels through buildings
+Transport infrastructure; Passing place
+Transport infrastructure; Pathway
+Transport infrastructure; Primary Road
+Transport infrastructure; Rail
+"Transport infrastructure; Rail depots, yards and sidings"
+Transport infrastructure; Rail line
+Transport infrastructure; Railway land
+Transport infrastructure; Residential road
+Transport infrastructure; Secondary road
+Transport infrastructure; Service access
+Transport infrastructure; Tertiary road
+Transport infrastructure; Track
+Transport infrastructure; Trunk road
+Transport infrastructure; Tunnel
+Transport infrastructure; Unclassified road
+University
+University; Conservatoire
+University; Hospital
+University; Observatory
+University; Student union
+University; Veterinary college
+Utilities office; Energy
+Utilities office; Water
+Vehicles; Bicycle maintenance and repair point
+Vehicles; Car share
+Vehicles; Depot
+Vehicles; Maintenance and repair
+Vehicles; Pound
+Vehicles; Rental
+Vehicles; Retail
+Waste management; Administrative office
+Waste management; Collection
+Waste management; Communal recycling bin
+Waste management; Communal rubbish bin
+Waste management; Integrated facility
+Waste management; Landfill
+Waste management; Recycling centre
+Waste management; Scrap yard and materials recovery
+Waste management; Sorting facility
+Wastewater; Sanitary dump
+Wastewater; Septic system services
+Wastewater; Treatment works
+Wastewater; Treatment works and facilities
+Water; Basin
+Water; Detention and retention basins
+Water; Lentic water bodies
+Water; Pipeline
+Water; Reservoir
+Water; Rivers and burns
+Water; Slipway
+Water; Spillway
+Water; Storage tower
+Water; Treatment works and facilities
+Water; Unspecified
+Waterway; Aquaducts and viaducts
+Waterway; Canal
+Waterway; Canal lock
