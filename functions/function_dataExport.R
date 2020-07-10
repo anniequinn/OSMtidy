@@ -116,7 +116,7 @@ dataExport <- function(data, name = NULL) {
         split(., .$feature) %>% 
         modify(. %>% rmCols)
       
-      exportExcel(tibbleList = dataUnfiltered, filename = fileInput)
+      tryCatch(exportExcel(tibbleList = dataUnfiltered, filename = fileInput), error = function(e) NULL)
       
     }
     
@@ -131,8 +131,8 @@ dataExport <- function(data, name = NULL) {
     fileOutput1 = paste0("outputs/", name, "_5_dataFilter-filtered_", format(Sys.time(), "%Y%m%d-%H%M%S"), ".csv")
     fileOutput2 = paste0("outputs/", name, "_5_dataFilter-filtered_", format(Sys.time(), "%Y%m%d-%H%M%S"), ".RDS")
     
-    data$filtered %>% write_csv(fileOutput1)
-    data$filtered %>% saveRDS(fileOutput2)
+    tryCatch(data$filtered %>% write_csv(fileOutput1), error = function(e) NULL)
+    tryCatch(data$filtered %>% saveRDS(fileOutput2), error = function(e) NULL)
     
     
     # -------------------------------------------------------------------------
@@ -167,7 +167,7 @@ dataExport <- function(data, name = NULL) {
         
       }
       
-      exportExcel(tibbleList = input, filename = fileVal)
+      tryCatch(exportExcel(tibbleList = input, filename = fileVal), error = function(e) NULL)
       
     }
     

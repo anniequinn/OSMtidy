@@ -120,14 +120,15 @@ dataFilter <- function(dataWrangle, filters = "filters.xlsx", rows = NULL) {
   
   # Filtered - i.e. captured by current filters
   OUTPUT %>% summary
-  OUTPUT <- 
+  OUTPUT <- tryCatch(
     OUTPUT %>% 
-    rmNullList() %>% 
-    rmEmptyList() %>% 
-    modify(. %>% st_as_sf) %>% 
-    mapedit:::combine_list_of_sf() %>% 
-    st_set_crs(4326) %>% 
-    as_tibble()
+      rmNullList() %>% 
+      rmEmptyList() %>% 
+      modify(. %>% st_as_sf) %>% 
+      mapedit:::combine_list_of_sf() %>% 
+      st_set_crs(4326) %>% 
+      as_tibble(),
+    error = function(e) NULL)
   
   # Filtered data requiring validation
   VALIDATE <- VALIDATE %>% purrr::flatten() %>% rmNullList %>% rmEmptyList() %>% modify(. %>% rmCols %>% as_tibble)
