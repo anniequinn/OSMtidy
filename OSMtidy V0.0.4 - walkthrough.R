@@ -3,8 +3,10 @@
 # Annie Visser-Quinn, a.visser-quinn@hw.ac.uk
 #
 # Created: 2020-05-12
-# Last revised: 2020-07-09
+# Last revised: 2020-07-10
 # -------------------------------------------------------------------------
+
+# Follow Vignette 2 - Walkthrough, or this annotated code.
 
 # Prepare the environment
 rm(list = ls()); cat("/014"); gc(verbose = TRUE) 
@@ -22,12 +24,13 @@ library(progress)
 library(data.table)
 library(readxl)
 library(openxlsx)
+library(xlsx)
 
 
 # -------------------------------------------------------------------------
 # SET-UP ------------------------------------------------------------------
 # -------------------------------------------------------------------------
-# Read in the functions that make up OSMtidy V0.0.3c
+# Read in the functions that make up OSMtidy V0.0.4
 source("functions/functions.R")
 
 # Print the functions in the environment
