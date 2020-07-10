@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Dr Annie Visser-Quinn, a.visser-quinn@hw.ac.uk" />
+
+<meta name="date" content="2020-07-10" />
+
+<title>OSMtidy - Vignette 2, Walkthrough</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">OSMtidy - Vignette 2, Walkthrough</h1>
+<h4 class="author">Dr Annie Visser-Quinn, <a href="mailto:a.visser-quinn@hw.ac.uk" class="email">a.visser-quinn@hw.ac.uk</a></h4>
+<h4 class="date">2020-07-10</h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#prerequisites">1. Prerequisites</a></li>
+<li><a href="#set-up">2. Set-up</a></li>
+<li><a href="#using-osmtidy">3. Using OSMtidy</a><ul>
+<li><a href="#data">3.1. Data</a></li>
+<li><a href="#extract-osm-data-via-the-r-package-osmdata">3.2. Extract OSM data via the R package osmdata</a></li>
+<li><a href="#cut-out-data">3.3. Cut out data</a></li>
+<li><a href="#data-wrangling">3.4. Data wrangling</a></li>
+<li><a href="#data-filtering">3.5. Data filtering</a></li>
+<li><a href="#data-tidy">3.6. Data tidy</a></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="prerequisites" class="section level2">
+<h2>1. Prerequisites</h2>
+<ul>
+<li>OSMtidy V0.0.4</li>
+<li>An input shapefile - see Vignette 1 for a guide to getting started</li>
+<li>R version 3.6.3 or newer</li>
+<li>R packages <code>tidyverse</code>, <code>lubridate</code>, <code>osmdata</code>, <code>sf</code>, <code>mapedit</code>, <code>pbapply</code>, <code>progress</code>, <code>data.table</code>, <code>readxl</code> and <code>openxlsx</code></li>
+</ul>
+</div>
+<div id="set-up" class="section level2">
+<h2>2. Set-up</h2>
+<p>To use OSMtidy, you should save your R script within the OSMtidy directory. To begin the set-up, set out your script as follows:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co"># Prepare the environment</span></a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw">rm</span>(<span class="dt">list =</span> <span class="kw">ls</span>()); <span class="kw">cat</span>(<span class="st">&quot;/014&quot;</span>); <span class="kw">gc</span>() </a>
+<a class="sourceLine" id="cb1-3" title="3"></a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="co"># Set working directory to the script&#39;s folder</span></a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="kw">setwd</span>(<span class="kw">dirname</span>(rstudioapi<span class="op">::</span><span class="kw">getSourceEditorContext</span>()<span class="op">$</span>path)); <span class="kw">getwd</span>() </a>
+<a class="sourceLine" id="cb1-6" title="6"></a>
+<a class="sourceLine" id="cb1-7" title="7"><span class="co"># Load the required packages</span></a>
+<a class="sourceLine" id="cb1-8" title="8"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb1-9" title="9"><span class="kw">library</span>(lubridate)</a>
+<a class="sourceLine" id="cb1-10" title="10"><span class="kw">library</span>(osmdata)</a>
+<a class="sourceLine" id="cb1-11" title="11"><span class="kw">library</span>(sf)</a>
+<a class="sourceLine" id="cb1-12" title="12"><span class="kw">library</span>(pbapply)</a>
+<a class="sourceLine" id="cb1-13" title="13"><span class="kw">library</span>(progress)</a>
+<a class="sourceLine" id="cb1-14" title="14"><span class="kw">library</span>(data.table)</a>
+<a class="sourceLine" id="cb1-15" title="15"><span class="kw">library</span>(readxl)</a>
+<a class="sourceLine" id="cb1-16" title="16"><span class="kw">library</span>(openxlsx)</a></code></pre></div>
+<p>Now you are ready to import the functions that make up OSMtidy V0.0.4. This walkthrough will use nine of the ten functions that make up OSMtidy.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">source</span>(<span class="st">&quot;functions/functions.R&quot;</span>)</a>
+<a class="sourceLine" id="cb2-2" title="2"><span class="kw">ls</span>()</a>
+<a class="sourceLine" id="cb2-3" title="3"><span class="co">#&gt;  [1] &quot;cookieCutter&quot;   &quot;dataCut&quot;        &quot;dataExport&quot;     &quot;dataExtract&quot;   </span></a>
+<a class="sourceLine" id="cb2-4" title="4"><span class="co">#&gt;  [5] &quot;dataFilter&quot;     &quot;dataShapefile&quot;  &quot;dataSummary&quot;    &quot;dataTidy&quot;      </span></a>
+<a class="sourceLine" id="cb2-5" title="5"><span class="co">#&gt;  [9] &quot;dataWrangle&quot;    &quot;filterOverview&quot;</span></a></code></pre></div>
+</div>
+<div id="using-osmtidy" class="section level2">
+<h2>3. Using OSMtidy</h2>
+<div id="data" class="section level3">
+<h3>3.1. Data</h3>
+<p>Using the function <code>dataShapefile()</code> we can import the shapefile for which data is to be extracted. There are two input arguments:</p>
+<ul>
+<li><em>name</em> This is the location name. This should be the same as the name of the shapefile in the shapefiles folder (without the .shp file extension)</li>
+<li><em>crs</em> Coordinate projection, optional. The function automatically converts to epsg 4326.</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">locationName &lt;-<span class="st"> &quot;exampleEdinburgh&quot;</span></a>
+<a class="sourceLine" id="cb3-2" title="2">locationName</a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="co">#&gt; [1] &quot;exampleEdinburgh&quot;</span></a>
+<a class="sourceLine" id="cb3-4" title="4"></a>
+<a class="sourceLine" id="cb3-5" title="5">shp &lt;-<span class="st"> </span><span class="kw">dataShapefile</span>(<span class="dt">name =</span> locationName)</a>
+<a class="sourceLine" id="cb3-6" title="6">shp</a>
+<a class="sourceLine" id="cb3-7" title="7"><span class="co">#&gt; Simple feature collection with 1 feature and 0 fields</span></a>
+<a class="sourceLine" id="cb3-8" title="8"><span class="co">#&gt; geometry type:  POLYGON</span></a>
+<a class="sourceLine" id="cb3-9" title="9"><span class="co">#&gt; dimension:      XY</span></a>
+<a class="sourceLine" id="cb3-10" title="10"><span class="co">#&gt; bbox:           xmin: -3.199973 ymin: 55.95726 xmax: -3.162921 ymax: 55.97507</span></a>
+<a class="sourceLine" id="cb3-11" title="11"><span class="co">#&gt; CRS:            4326</span></a>
+<a class="sourceLine" id="cb3-12" title="12"><span class="co">#&gt;                         geometry</span></a>
+<a class="sourceLine" id="cb3-13" title="13"><span class="co">#&gt; 1 POLYGON ((-3.162921 55.9633...</span></a></code></pre></div>
+<p>At each step, you can print a summary of the OSMtidy outputs using the function <code>dataSummary()</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">shp <span class="op">%&gt;%</span><span class="st"> </span>dataSummary</a>
+<a class="sourceLine" id="cb4-2" title="2"><span class="co">#&gt; $class</span></a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="co">#&gt; [1] &quot;sf&quot;                &quot;data.frame&quot;        &quot;OSMtidy_dataInput&quot;</span></a>
+<a class="sourceLine" id="cb4-4" title="4"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-5" title="5"><span class="co">#&gt; $shapeProjection</span></a>
+<a class="sourceLine" id="cb4-6" title="6"><span class="co">#&gt; Coordinate Reference System:</span></a>
+<a class="sourceLine" id="cb4-7" title="7"><span class="co">#&gt;   User input: 4326 </span></a>
+<a class="sourceLine" id="cb4-8" title="8"><span class="co">#&gt;   wkt:</span></a>
+<a class="sourceLine" id="cb4-9" title="9"><span class="co">#&gt; GEOGCS[&quot;GCS_WGS_1984&quot;,</span></a>
+<a class="sourceLine" id="cb4-10" title="10"><span class="co">#&gt;     DATUM[&quot;WGS_1984&quot;,</span></a>
+<a class="sourceLine" id="cb4-11" title="11"><span class="co">#&gt;         SPHEROID[&quot;WGS_84&quot;,6378137,298.257223563]],</span></a>
+<a class="sourceLine" id="cb4-12" title="12"><span class="co">#&gt;     PRIMEM[&quot;Greenwich&quot;,0],</span></a>
+<a class="sourceLine" id="cb4-13" title="13"><span class="co">#&gt;     UNIT[&quot;Degree&quot;,0.017453292519943295],</span></a>
+<a class="sourceLine" id="cb4-14" title="14"><span class="co">#&gt;     AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]</span></a>
+<a class="sourceLine" id="cb4-15" title="15"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-16" title="16"><span class="co">#&gt; $shapeArea</span></a>
+<a class="sourceLine" id="cb4-17" title="17"><span class="co">#&gt; 2678291 [m^2]</span></a>
+<a class="sourceLine" id="cb4-18" title="18"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-19" title="19"><span class="co">#&gt; $shapePerimeter</span></a>
+<a class="sourceLine" id="cb4-20" title="20"><span class="co">#&gt; 9150.657 [m]</span></a>
+<a class="sourceLine" id="cb4-21" title="21"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-22" title="22"><span class="co">#&gt; $shapePlot</span></a></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>You can also export any OSMtidy output using the function <code>dataExport()</code>. All outputs are time stamped and saved in the outputs folder within the OSMtidy directory.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">dataExport</span>(<span class="dt">data =</span> shp, <span class="dt">name =</span> locationName)</a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="co">#&gt; File saved as: outputs/exampleEdinburgh_1_dataInput_20200710-131237.RDS</span></a></code></pre></div>
+</div>
+<div id="extract-osm-data-via-the-r-package-osmdata" class="section level3">
+<h3>3.2. Extract OSM data via the R package osmdata</h3>
+<p>The OpenStreetMap data is extracted, via the R package osmdata and the overpass server, using the function <code>dataExtract()</code>. Timestamps and progress are printed when the function is running.</p>
+<p>OSMtidy V0.0.4 extracts 47 of 209 available features in osmdata. To change the features extracted, add or delete lines in <code>functions/features.txt</code>. A list of the available features in osmdata can be accessed via the function <code>osmdata::available_features</code>.</p>
+<p>The function <code>dataExtract</code> has three input arguments:</p>
+<ul>
+<li><em>dataShapefile</em> The output from step 1</li>
+<li><em>timeout</em> The time in seconds before the query to the overpass server will time out; see DETAILS below
+<ul>
+<li>Default 300 seconds</li>
+</ul></li>
+<li><em>memsize</em> The memory size for the overpass server; see DETAILS below
+<ul>
+<li>Default 1073741824 Bytes</li>
+</ul></li>
+</ul>
+<div id="details-from-the-r-package-osmdata" class="section level4">
+<h4>3.2.1 DETAILS from the R package osmdata</h4>
+<blockquote>
+<p><strong>timeout</strong> It may be necessary to increase this value for large queries, because the server may time out before all data are delivered. <strong>memsize</strong> The default memory size for the ‘overpass’ server in bytes; may need to be increased in order to handle large queries.&gt; See <a href="https://wiki.openstreetmap.org/wiki/Overpass_API#Resource_management_options_.28osm-script.29" class="uri">https://wiki.openstreetmap.org/wiki/Overpass_API#Resource_management_options_.28osm-script.29</a> for explanation of timeout and memsize (or maxsize in overpass terms). Note in particular the comment that queries with arbitrarily large memsize are likely to be rejected.</p>
+</blockquote>
+<p>The code chunk below is not run. This is because (1) the data extraction may take some time depending on the size of the area; and (2), to avoid flooding the overpass server.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">dlExtract &lt;-<span class="st"> </span><span class="kw">dataExtract</span>(<span class="dt">dataShapefile =</span> shp)</a></code></pre></div>
+<p>The output can be interrogated and exported, using the functions <code>dataSummary</code> and <code>dataExport</code> respectively, as before.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">dlExtract <span class="op">%&gt;%</span><span class="st"> </span>dataSummary</a>
+<a class="sourceLine" id="cb7-2" title="2"><span class="co">#&gt; $class</span></a>
+<a class="sourceLine" id="cb7-3" title="3"><span class="co">#&gt; [1] &quot;list&quot;                &quot;OSMtidy_dataExtract&quot;</span></a>
+<a class="sourceLine" id="cb7-4" title="4"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb7-5" title="5"><span class="co">#&gt; $byGeometry</span></a>
+<a class="sourceLine" id="cb7-6" title="6"><span class="co">#&gt;            type  total</span></a>
+<a class="sourceLine" id="cb7-7" title="7"><span class="co">#&gt; 1         lines   7779</span></a>
+<a class="sourceLine" id="cb7-8" title="8"><span class="co">#&gt; 2    multilines      1</span></a>
+<a class="sourceLine" id="cb7-9" title="9"><span class="co">#&gt; 3 multipolygons     27</span></a>
+<a class="sourceLine" id="cb7-10" title="10"><span class="co">#&gt; 4        points 130481</span></a>
+<a class="sourceLine" id="cb7-11" title="11"><span class="co">#&gt; 5      polygons  12320</span></a>
+<a class="sourceLine" id="cb7-12" title="12"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb7-13" title="13"><span class="co">#&gt; $byFeature</span></a>
+<a class="sourceLine" id="cb7-14" title="14"><span class="co">#&gt;                  feature total</span></a>
+<a class="sourceLine" id="cb7-15" title="15"><span class="co">#&gt; 1                amenity  6843</span></a>
+<a class="sourceLine" id="cb7-16" title="16"><span class="co">#&gt; 2                barrier 21130</span></a>
+<a class="sourceLine" id="cb7-17" title="17"><span class="co">#&gt; 3                 bridge    99</span></a>
+<a class="sourceLine" id="cb7-18" title="18"><span class="co">#&gt; 4               building 56467</span></a>
+<a class="sourceLine" id="cb7-19" title="19"><span class="co">#&gt; 5                  craft    45</span></a>
+<a class="sourceLine" id="cb7-20" title="20"><span class="co">#&gt; 6               cycleway   164</span></a>
+<a class="sourceLine" id="cb7-21" title="21"><span class="co">#&gt; 7             dispensing     4</span></a>
+<a class="sourceLine" id="cb7-22" title="22"><span class="co">#&gt; 8              emergency   137</span></a>
+<a class="sourceLine" id="cb7-23" title="23"><span class="co">#&gt; 9       generator:method    64</span></a>
+<a class="sourceLine" id="cb7-24" title="24"><span class="co">#&gt; 10      generator:source   245</span></a>
+<a class="sourceLine" id="cb7-25" title="25"><span class="co">#&gt; 11            healthcare    65</span></a>
+<a class="sourceLine" id="cb7-26" title="26"><span class="co">#&gt; 12 healthcare:speciality     1</span></a>
+<a class="sourceLine" id="cb7-27" title="27"><span class="co">#&gt; 13               highway 14028</span></a>
+<a class="sourceLine" id="cb7-28" title="28"><span class="co">#&gt; 14              historic    75</span></a>
+<a class="sourceLine" id="cb7-29" title="29"><span class="co">#&gt; 15               landuse 10819</span></a>
+<a class="sourceLine" id="cb7-30" title="30"><span class="co">#&gt; 16               leisure 26030</span></a>
+<a class="sourceLine" id="cb7-31" title="31"><span class="co">#&gt; 17              military     1</span></a>
+<a class="sourceLine" id="cb7-32" title="32"><span class="co">#&gt; 18               natural  9605</span></a>
+<a class="sourceLine" id="cb7-33" title="33"><span class="co">#&gt; 19                office   195</span></a>
+<a class="sourceLine" id="cb7-34" title="34"><span class="co">#&gt; 20                 power   342</span></a>
+<a class="sourceLine" id="cb7-35" title="35"><span class="co">#&gt; 21      public_transport    78</span></a>
+<a class="sourceLine" id="cb7-36" title="36"><span class="co">#&gt; 22               railway   459</span></a>
+<a class="sourceLine" id="cb7-37" title="37"><span class="co">#&gt; 23        recycling_type    36</span></a>
+<a class="sourceLine" id="cb7-38" title="38"><span class="co">#&gt; 24           residential    65</span></a>
+<a class="sourceLine" id="cb7-39" title="39"><span class="co">#&gt; 25               service  1670</span></a>
+<a class="sourceLine" id="cb7-40" title="40"><span class="co">#&gt; 26                  shop   729</span></a>
+<a class="sourceLine" id="cb7-41" title="41"><span class="co">#&gt; 27       social_facility   202</span></a>
+<a class="sourceLine" id="cb7-42" title="42"><span class="co">#&gt; 28            substation   121</span></a>
+<a class="sourceLine" id="cb7-43" title="43"><span class="co">#&gt; 29       traffic_calming    58</span></a>
+<a class="sourceLine" id="cb7-44" title="44"><span class="co">#&gt; 30                 usage    54</span></a>
+<a class="sourceLine" id="cb7-45" title="45"><span class="co">#&gt; 31               vending     2</span></a>
+<a class="sourceLine" id="cb7-46" title="46"><span class="co">#&gt; 32               voltage    78</span></a>
+<a class="sourceLine" id="cb7-47" title="47"><span class="co">#&gt; 33                 water   696</span></a>
+<a class="sourceLine" id="cb7-48" title="48"><span class="co">#&gt; 34             wholesale     1</span></a>
+<a class="sourceLine" id="cb7-49" title="49"></a>
+<a class="sourceLine" id="cb7-50" title="50"><span class="kw">dataExport</span>(<span class="dt">data =</span> dlExtract, <span class="dt">name =</span> locationName)</a>
+<a class="sourceLine" id="cb7-51" title="51"><span class="co">#&gt; File saved as: outputs/exampleEdinburgh_2_dataExtract_20200710-131239.RDS</span></a></code></pre></div>
+</div>
+</div>
+<div id="cut-out-data" class="section level3">
+<h3>3.3. Cut out data</h3>
+<p>In step 2, the data was extracted as a “bounding box” (a rectangle). In step 3, the data is cut to the shapefile using the function <code>dataCut()</code>. Timestamps and progress are printed when the function is running. The function <code>dataCut</code> has two input arguments:</p>
+<ul>
+<li><strong>dataExtracted</strong> Output from step 2</li>
+<li><strong>dataShapefile</strong> Output from step 1</li>
+</ul>
+<p>Outputs can be interrogated and exported as before.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">dlCut &lt;-<span class="st"> </span><span class="kw">dataCut</span>(<span class="dt">dataExtracted =</span> dlExtract, <span class="dt">dataShapefile =</span> shp)</a>
+<a class="sourceLine" id="cb8-2" title="2"><span class="co">#&gt; 13:12:41 Step one of four</span></a>
+<a class="sourceLine" id="cb8-3" title="3"><span class="co">#&gt; 13:12:41 Step two of four</span></a>
+<a class="sourceLine" id="cb8-4" title="4"><span class="co">#&gt; 13:12:47 Step three of four</span></a>
+<a class="sourceLine" id="cb8-5" title="5"><span class="co">#&gt; 13:12:51 Step four of four</span></a>
+<a class="sourceLine" id="cb8-6" title="6"><span class="co">#&gt; 13:12:51 Complete, preparing output</span></a>
+<a class="sourceLine" id="cb8-7" title="7"></a>
+<a class="sourceLine" id="cb8-8" title="8">dlCut <span class="op">%&gt;%</span><span class="st"> </span>dataSummary</a>
+<a class="sourceLine" id="cb8-9" title="9"><span class="co">#&gt; $class</span></a>
+<a class="sourceLine" id="cb8-10" title="10"><span class="co">#&gt; [1] &quot;list&quot;            &quot;OSMtidy_dataCut&quot;</span></a>
+<a class="sourceLine" id="cb8-11" title="11"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-12" title="12"><span class="co">#&gt; $byGeometry</span></a>
+<a class="sourceLine" id="cb8-13" title="13"><span class="co">#&gt;              type total</span></a>
+<a class="sourceLine" id="cb8-14" title="14"><span class="co">#&gt; 1      linestring  4457</span></a>
+<a class="sourceLine" id="cb8-15" title="15"><span class="co">#&gt; 2 multilinestring     5</span></a>
+<a class="sourceLine" id="cb8-16" title="16"><span class="co">#&gt; 3    multipolygon    32</span></a>
+<a class="sourceLine" id="cb8-17" title="17"><span class="co">#&gt; 4           point 73727</span></a>
+<a class="sourceLine" id="cb8-18" title="18"><span class="co">#&gt; 5         polygon  7460</span></a>
+<a class="sourceLine" id="cb8-19" title="19"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-20" title="20"><span class="co">#&gt; $byFeature</span></a>
+<a class="sourceLine" id="cb8-21" title="21"><span class="co">#&gt;                  feature total</span></a>
+<a class="sourceLine" id="cb8-22" title="22"><span class="co">#&gt; 1                amenity  3789</span></a>
+<a class="sourceLine" id="cb8-23" title="23"><span class="co">#&gt; 2                barrier 12000</span></a>
+<a class="sourceLine" id="cb8-24" title="24"><span class="co">#&gt; 3                 bridge    67</span></a>
+<a class="sourceLine" id="cb8-25" title="25"><span class="co">#&gt; 4               building 32814</span></a>
+<a class="sourceLine" id="cb8-26" title="26"><span class="co">#&gt; 5                  craft    29</span></a>
+<a class="sourceLine" id="cb8-27" title="27"><span class="co">#&gt; 6               cycleway   110</span></a>
+<a class="sourceLine" id="cb8-28" title="28"><span class="co">#&gt; 7             dispensing     2</span></a>
+<a class="sourceLine" id="cb8-29" title="29"><span class="co">#&gt; 8              emergency    66</span></a>
+<a class="sourceLine" id="cb8-30" title="30"><span class="co">#&gt; 9       generator:method    64</span></a>
+<a class="sourceLine" id="cb8-31" title="31"><span class="co">#&gt; 10      generator:source   215</span></a>
+<a class="sourceLine" id="cb8-32" title="32"><span class="co">#&gt; 11            healthcare    17</span></a>
+<a class="sourceLine" id="cb8-33" title="33"><span class="co">#&gt; 12 healthcare:speciality     1</span></a>
+<a class="sourceLine" id="cb8-34" title="34"><span class="co">#&gt; 13               highway  6878</span></a>
+<a class="sourceLine" id="cb8-35" title="35"><span class="co">#&gt; 14              historic    44</span></a>
+<a class="sourceLine" id="cb8-36" title="36"><span class="co">#&gt; 15               landuse  6591</span></a>
+<a class="sourceLine" id="cb8-37" title="37"><span class="co">#&gt; 16               leisure 14851</span></a>
+<a class="sourceLine" id="cb8-38" title="38"><span class="co">#&gt; 17              military     1</span></a>
+<a class="sourceLine" id="cb8-39" title="39"><span class="co">#&gt; 18               natural  5301</span></a>
+<a class="sourceLine" id="cb8-40" title="40"><span class="co">#&gt; 19                office   109</span></a>
+<a class="sourceLine" id="cb8-41" title="41"><span class="co">#&gt; 20                 power   222</span></a>
+<a class="sourceLine" id="cb8-42" title="42"><span class="co">#&gt; 21      public_transport    37</span></a>
+<a class="sourceLine" id="cb8-43" title="43"><span class="co">#&gt; 22               railway   200</span></a>
+<a class="sourceLine" id="cb8-44" title="44"><span class="co">#&gt; 23        recycling_type    23</span></a>
+<a class="sourceLine" id="cb8-45" title="45"><span class="co">#&gt; 24           residential    55</span></a>
+<a class="sourceLine" id="cb8-46" title="46"><span class="co">#&gt; 25               service   960</span></a>
+<a class="sourceLine" id="cb8-47" title="47"><span class="co">#&gt; 26                  shop   428</span></a>
+<a class="sourceLine" id="cb8-48" title="48"><span class="co">#&gt; 27       social_facility   184</span></a>
+<a class="sourceLine" id="cb8-49" title="49"><span class="co">#&gt; 28            substation    80</span></a>
+<a class="sourceLine" id="cb8-50" title="50"><span class="co">#&gt; 29       traffic_calming    47</span></a>
+<a class="sourceLine" id="cb8-51" title="51"><span class="co">#&gt; 30                 usage    38</span></a>
+<a class="sourceLine" id="cb8-52" title="52"><span class="co">#&gt; 31               vending     1</span></a>
+<a class="sourceLine" id="cb8-53" title="53"><span class="co">#&gt; 32               voltage    51</span></a>
+<a class="sourceLine" id="cb8-54" title="54"><span class="co">#&gt; 33                 water   405</span></a>
+<a class="sourceLine" id="cb8-55" title="55"><span class="co">#&gt; 34             wholesale     1</span></a>
+<a class="sourceLine" id="cb8-56" title="56"></a>
+<a class="sourceLine" id="cb8-57" title="57"><span class="kw">dataExport</span>(<span class="dt">data =</span> dlCut, <span class="dt">name =</span> locationName)</a>
+<a class="sourceLine" id="cb8-58" title="58"><span class="co">#&gt; File saved as: outputs/exampleEdinburgh_3_dataCut_20200710-131252.RDS</span></a></code></pre></div>
+</div>
+<div id="data-wrangling" class="section level3">
+<h3>3.4. Data wrangling</h3>
+<p>Using the function <code>dataWrangle</code> we can tidy up (or wrangle) the data before filtering. Timestamps and progress are printed when the function is running. There is one input argument:</p>
+<ul>
+<li><strong>dataCut</strong> Output from step 3</li>
+</ul>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">dlWrangle &lt;-<span class="st"> </span><span class="kw">dataWrangle</span>(<span class="dt">dataCut =</span> dlCut)</a>
+<a class="sourceLine" id="cb9-2" title="2"><span class="co">#&gt; 13:12:53 Step one of three</span></a>
+<a class="sourceLine" id="cb9-3" title="3"><span class="co">#&gt; 13:12:53 Step two of three</span></a>
+<a class="sourceLine" id="cb9-4" title="4"><span class="co">#&gt; 13:12:55 Step three of three</span></a>
+<a class="sourceLine" id="cb9-5" title="5"><span class="co">#&gt; 13:12:59 Complete, preparing output</span></a>
+<a class="sourceLine" id="cb9-6" title="6"></a>
+<a class="sourceLine" id="cb9-7" title="7">dlWrangle <span class="op">%&gt;%</span><span class="st"> </span>dataSummary</a>
+<a class="sourceLine" id="cb9-8" title="8"><span class="co">#&gt; $class</span></a>
+<a class="sourceLine" id="cb9-9" title="9"><span class="co">#&gt; [1] &quot;list&quot;                &quot;OSMtidy_dataWrangle&quot;</span></a>
+<a class="sourceLine" id="cb9-10" title="10"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-11" title="11"><span class="co">#&gt; $byGeometry</span></a>
+<a class="sourceLine" id="cb9-12" title="12"><span class="co">#&gt;           data            type total percent</span></a>
+<a class="sourceLine" id="cb9-13" title="13"><span class="co">#&gt; 1 dataWrangled      linestring  4132    4.87</span></a>
+<a class="sourceLine" id="cb9-14" title="14"><span class="co">#&gt; 2 dataWrangled multilinestring    12    0.01</span></a>
+<a class="sourceLine" id="cb9-15" title="15"><span class="co">#&gt; 3 dataWrangled    multipolygon    28    0.03</span></a>
+<a class="sourceLine" id="cb9-16" title="16"><span class="co">#&gt; 4 dataWrangled           point  5881    6.93</span></a>
+<a class="sourceLine" id="cb9-17" title="17"><span class="co">#&gt; 5 dataWrangled         polygon  7017    8.26</span></a>
+<a class="sourceLine" id="cb9-18" title="18"><span class="co">#&gt; 6     noDetail      linestring    13    0.02</span></a>
+<a class="sourceLine" id="cb9-19" title="19"><span class="co">#&gt; 7     noDetail           point 67505   79.50</span></a>
+<a class="sourceLine" id="cb9-20" title="20"><span class="co">#&gt; 8     noDetail         polygon   328    0.39</span></a>
+<a class="sourceLine" id="cb9-21" title="21"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-22" title="22"><span class="co">#&gt; $byFeature</span></a>
+<a class="sourceLine" id="cb9-23" title="23"><span class="co">#&gt;            data          feature total percent</span></a>
+<a class="sourceLine" id="cb9-24" title="24"><span class="co">#&gt; 1  dataWrangled          amenity   640    0.75</span></a>
+<a class="sourceLine" id="cb9-25" title="25"><span class="co">#&gt; 2  dataWrangled          barrier  2873    3.38</span></a>
+<a class="sourceLine" id="cb9-26" title="26"><span class="co">#&gt; 3  dataWrangled         building  4240    4.99</span></a>
+<a class="sourceLine" id="cb9-27" title="27"><span class="co">#&gt; 4  dataWrangled            craft    21    0.02</span></a>
+<a class="sourceLine" id="cb9-28" title="28"><span class="co">#&gt; 5  dataWrangled         cycleway     1    0.00</span></a>
+<a class="sourceLine" id="cb9-29" title="29"><span class="co">#&gt; 6  dataWrangled        emergency    65    0.08</span></a>
+<a class="sourceLine" id="cb9-30" title="30"><span class="co">#&gt; 7  dataWrangled generator:source    15    0.02</span></a>
+<a class="sourceLine" id="cb9-31" title="31"><span class="co">#&gt; 8  dataWrangled       healthcare     2    0.00</span></a>
+<a class="sourceLine" id="cb9-32" title="32"><span class="co">#&gt; 9  dataWrangled          highway  1161    1.37</span></a>
+<a class="sourceLine" id="cb9-33" title="33"><span class="co">#&gt; 10 dataWrangled         historic     6    0.01</span></a>
+<a class="sourceLine" id="cb9-34" title="34"><span class="co">#&gt; 11 dataWrangled          landuse   383    0.45</span></a>
+<a class="sourceLine" id="cb9-35" title="35"><span class="co">#&gt; 12 dataWrangled          leisure  2348    2.77</span></a>
+<a class="sourceLine" id="cb9-36" title="36"><span class="co">#&gt; 13 dataWrangled         military     1    0.00</span></a>
+<a class="sourceLine" id="cb9-37" title="37"><span class="co">#&gt; 14 dataWrangled          natural  4163    4.90</span></a>
+<a class="sourceLine" id="cb9-38" title="38"><span class="co">#&gt; 15 dataWrangled           office    81    0.10</span></a>
+<a class="sourceLine" id="cb9-39" title="39"><span class="co">#&gt; 16 dataWrangled            power    11    0.01</span></a>
+<a class="sourceLine" id="cb9-40" title="40"><span class="co">#&gt; 17 dataWrangled          railway    12    0.01</span></a>
+<a class="sourceLine" id="cb9-41" title="41"><span class="co">#&gt; 18 dataWrangled          service     2    0.00</span></a>
+<a class="sourceLine" id="cb9-42" title="42"><span class="co">#&gt; 19 dataWrangled             shop   365    0.43</span></a>
+<a class="sourceLine" id="cb9-43" title="43"><span class="co">#&gt; 20 dataWrangled  social_facility     1    0.00</span></a>
+<a class="sourceLine" id="cb9-44" title="44"><span class="co">#&gt; 21 dataWrangled            usage     7    0.01</span></a>
+<a class="sourceLine" id="cb9-45" title="45"><span class="co">#&gt; 22 dataWrangled            water     1    0.00</span></a>
+<a class="sourceLine" id="cb9-46" title="46"><span class="co">#&gt; 23 dataWrangled             &lt;NA&gt;   671    0.79</span></a>
+<a class="sourceLine" id="cb9-47" title="47"><span class="co">#&gt; 24     noDetail          amenity  3053    3.60</span></a>
+<a class="sourceLine" id="cb9-48" title="48"><span class="co">#&gt; 25     noDetail          barrier  9030   10.63</span></a>
+<a class="sourceLine" id="cb9-49" title="49"><span class="co">#&gt; 26     noDetail           bridge    40    0.05</span></a>
+<a class="sourceLine" id="cb9-50" title="50"><span class="co">#&gt; 27     noDetail         building 28484   33.54</span></a>
+<a class="sourceLine" id="cb9-51" title="51"><span class="co">#&gt; 28     noDetail         cycleway    71    0.08</span></a>
+<a class="sourceLine" id="cb9-52" title="52"><span class="co">#&gt; 29     noDetail generator:method    52    0.06</span></a>
+<a class="sourceLine" id="cb9-53" title="53"><span class="co">#&gt; 30     noDetail generator:source   188    0.22</span></a>
+<a class="sourceLine" id="cb9-54" title="54"><span class="co">#&gt; 31     noDetail          highway  5251    6.18</span></a>
+<a class="sourceLine" id="cb9-55" title="55"><span class="co">#&gt; 32     noDetail         historic    31    0.04</span></a>
+<a class="sourceLine" id="cb9-56" title="56"><span class="co">#&gt; 33     noDetail          landuse  6182    7.28</span></a>
+<a class="sourceLine" id="cb9-57" title="57"><span class="co">#&gt; 34     noDetail          leisure 12464   14.68</span></a>
+<a class="sourceLine" id="cb9-58" title="58"><span class="co">#&gt; 35     noDetail          natural  1121    1.32</span></a>
+<a class="sourceLine" id="cb9-59" title="59"><span class="co">#&gt; 36     noDetail           office    24    0.03</span></a>
+<a class="sourceLine" id="cb9-60" title="60"><span class="co">#&gt; 37     noDetail            power   176    0.21</span></a>
+<a class="sourceLine" id="cb9-61" title="61"><span class="co">#&gt; 38     noDetail          railway   168    0.20</span></a>
+<a class="sourceLine" id="cb9-62" title="62"><span class="co">#&gt; 39     noDetail      residential    51    0.06</span></a>
+<a class="sourceLine" id="cb9-63" title="63"><span class="co">#&gt; 40     noDetail          service   686    0.81</span></a>
+<a class="sourceLine" id="cb9-64" title="64"><span class="co">#&gt; 41     noDetail             shop    48    0.06</span></a>
+<a class="sourceLine" id="cb9-65" title="65"><span class="co">#&gt; 42     noDetail  social_facility   172    0.20</span></a>
+<a class="sourceLine" id="cb9-66" title="66"><span class="co">#&gt; 43     noDetail       substation    59    0.07</span></a>
+<a class="sourceLine" id="cb9-67" title="67"><span class="co">#&gt; 44     noDetail  traffic_calming    23    0.03</span></a>
+<a class="sourceLine" id="cb9-68" title="68"><span class="co">#&gt; 45     noDetail            usage    31    0.04</span></a>
+<a class="sourceLine" id="cb9-69" title="69"><span class="co">#&gt; 46     noDetail          voltage    48    0.06</span></a>
+<a class="sourceLine" id="cb9-70" title="70"><span class="co">#&gt; 47     noDetail            water   393    0.46</span></a>
+<a class="sourceLine" id="cb9-71" title="71"></a>
+<a class="sourceLine" id="cb9-72" title="72"><span class="kw">dataExport</span>(<span class="dt">data =</span> dlWrangle, <span class="dt">name =</span> locationName)</a>
+<a class="sourceLine" id="cb9-73" title="73"><span class="co">#&gt; Files saved as:</span></a>
+<a class="sourceLine" id="cb9-74" title="74"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-75" title="75"><span class="co">#&gt;  outputs/exampleEdinburgh_4_dataWrangle_20200710-131300.RDS</span></a>
+<a class="sourceLine" id="cb9-76" title="76"><span class="co">#&gt;  outputs/exampleEdinburgh_4_dataWrangle-noDetail_20200710-131300.xlsx</span></a></code></pre></div>
+</div>
+<div id="data-filtering" class="section level3">
+<h3>3.5. Data filtering</h3>
+<p>The main function of OSMtidy is <code>dataFilter()</code>. Here, the data is filtered based on rules set out in the excel file <em>filters.xlsx</em>; this can be found in the main OSMtidy directory. You may adjust these rules by editting the spreadsheet. See Vignette 3 for further details. Timestamps and progress are printed when the function is running. There are three input arguments to <code>dataFilter()</code>:</p>
+<ul>
+<li><strong>dataWrangle</strong> Output from step 4</li>
+<li><strong>filters</strong> Name of the the filters spreadsheet
+<ul>
+<li>Default to filters.xlsx</li>
+<li>Use the function <code>filterOverview()</code> for an overview of the filtered objects</li>
+</ul></li>
+<li><strong>rows</strong> Specify the rows in the spreadsheet to use as filters. Intended for troubleshooting and adjusting filters
+<ul>
+<li>Default to NULL, i.e. all filters or rows</li>
+</ul></li>
+</ul>
+<p>Depending on the location size, number of filters and computer performance, filters can take anything from a couple of minutes (the example ward) to multiple hours to run (City of London and Boroughs). The code chunk below is not run.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">dlFilter &lt;-<span class="st"> </span><span class="kw">dataFilter</span>(<span class="dt">dataWrangle =</span> dlWrangle, <span class="dt">filters =</span> <span class="st">&quot;filters.xlsx&quot;</span>)</a></code></pre></div>
+<p>The output may be interrogated and exported as before.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">dlFilter <span class="op">%&gt;%</span><span class="st"> </span>dataSummary</a>
+<a class="sourceLine" id="cb11-2" title="2"><span class="co">#&gt; $class</span></a>
+<a class="sourceLine" id="cb11-3" title="3"><span class="co">#&gt; [1] &quot;list&quot;               &quot;OSMtidy_dataFilter&quot;</span></a>
+<a class="sourceLine" id="cb11-4" title="4"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb11-5" title="5"><span class="co">#&gt; $summary</span></a>
+<a class="sourceLine" id="cb11-6" title="6"><span class="co">#&gt;         data total percent</span></a>
+<a class="sourceLine" id="cb11-7" title="7"><span class="co">#&gt; 1   filtered 12194   71.44</span></a>
+<a class="sourceLine" id="cb11-8" title="8"><span class="co">#&gt; 2 unfiltered   562    3.29</span></a>
+<a class="sourceLine" id="cb11-9" title="9"><span class="co">#&gt; 3   validate  4314   25.27</span></a>
+<a class="sourceLine" id="cb11-10" title="10"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb11-11" title="11"><span class="co">#&gt; $summaryFiltered</span></a>
+<a class="sourceLine" id="cb11-12" title="12"><span class="co">#&gt; # A tibble: 176 x 2</span></a>
+<a class="sourceLine" id="cb11-13" title="13"><span class="co">#&gt;    desc                           total</span></a>
+<a class="sourceLine" id="cb11-14" title="14"><span class="co">#&gt;    &lt;chr&gt;                          &lt;int&gt;</span></a>
+<a class="sourceLine" id="cb11-15" title="15"><span class="co">#&gt;  1 Amenity; ATM                      14</span></a>
+<a class="sourceLine" id="cb11-16" title="16"><span class="co">#&gt;  2 Amenity; Bicycle parking          49</span></a>
+<a class="sourceLine" id="cb11-17" title="17"><span class="co">#&gt;  3 Amenity; Bike rental point         6</span></a>
+<a class="sourceLine" id="cb11-18" title="18"><span class="co">#&gt;  4 Amenity; Car wash                  2</span></a>
+<a class="sourceLine" id="cb11-19" title="19"><span class="co">#&gt;  5 Amenity; Fire hydrant             64</span></a>
+<a class="sourceLine" id="cb11-20" title="20"><span class="co">#&gt;  6 Amenity; Flood defence             2</span></a>
+<a class="sourceLine" id="cb11-21" title="21"><span class="co">#&gt;  7 Amenity; Fountain (decorative)     1</span></a>
+<a class="sourceLine" id="cb11-22" title="22"><span class="co">#&gt;  8 Amenity; Fuel station              1</span></a>
+<a class="sourceLine" id="cb11-23" title="23"><span class="co">#&gt;  9 Amenity; Garages and sheds       325</span></a>
+<a class="sourceLine" id="cb11-24" title="24"><span class="co">#&gt; 10 Amenity; Information board         1</span></a>
+<a class="sourceLine" id="cb11-25" title="25"><span class="co">#&gt; # ... with 166 more rows</span></a>
+<a class="sourceLine" id="cb11-26" title="26"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb11-27" title="27"><span class="co">#&gt; $byFeature</span></a>
+<a class="sourceLine" id="cb11-28" title="28"><span class="co">#&gt;          data         feature total</span></a>
+<a class="sourceLine" id="cb11-29" title="29"><span class="co">#&gt; 1  unfiltered        building   531</span></a>
+<a class="sourceLine" id="cb11-30" title="30"><span class="co">#&gt; 2  unfiltered         landuse    12</span></a>
+<a class="sourceLine" id="cb11-31" title="31"><span class="co">#&gt; 3  unfiltered            &lt;NA&gt;    19</span></a>
+<a class="sourceLine" id="cb11-32" title="32"><span class="co">#&gt; 4    validate         amenity     4</span></a>
+<a class="sourceLine" id="cb11-33" title="33"><span class="co">#&gt; 5    validate        building    28</span></a>
+<a class="sourceLine" id="cb11-34" title="34"><span class="co">#&gt; 6    validate           craft     3</span></a>
+<a class="sourceLine" id="cb11-35" title="35"><span class="co">#&gt; 7    validate         highway     6</span></a>
+<a class="sourceLine" id="cb11-36" title="36"><span class="co">#&gt; 8    validate        historic     1</span></a>
+<a class="sourceLine" id="cb11-37" title="37"><span class="co">#&gt; 9    validate         leisure     6</span></a>
+<a class="sourceLine" id="cb11-38" title="38"><span class="co">#&gt; 10   validate        military     1</span></a>
+<a class="sourceLine" id="cb11-39" title="39"><span class="co">#&gt; 11   validate          office     7</span></a>
+<a class="sourceLine" id="cb11-40" title="40"><span class="co">#&gt; 12   validate         railway    12</span></a>
+<a class="sourceLine" id="cb11-41" title="41"><span class="co">#&gt; 13   validate            shop     3</span></a>
+<a class="sourceLine" id="cb11-42" title="42"><span class="co">#&gt; 14   validate social_facility     1</span></a>
+<a class="sourceLine" id="cb11-43" title="43"><span class="co">#&gt; 15   validate            &lt;NA&gt;  4242</span></a>
+<a class="sourceLine" id="cb11-44" title="44"></a>
+<a class="sourceLine" id="cb11-45" title="45"><span class="kw">dataExport</span>(<span class="dt">data =</span> dlFilter, <span class="dt">name =</span> locationName)</a>
+<a class="sourceLine" id="cb11-46" title="46"><span class="co">#&gt; Loading required package: xlsx</span></a>
+<a class="sourceLine" id="cb11-47" title="47"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb11-48" title="48"><span class="co">#&gt; Attaching package: &#39;xlsx&#39;</span></a>
+<a class="sourceLine" id="cb11-49" title="49"><span class="co">#&gt; The following objects are masked from &#39;package:openxlsx&#39;:</span></a>
+<a class="sourceLine" id="cb11-50" title="50"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb11-51" title="51"><span class="co">#&gt;     createWorkbook, loadWorkbook, read.xlsx, saveWorkbook, write.xlsx</span></a>
+<a class="sourceLine" id="cb11-52" title="52"><span class="co">#&gt; Files saved as:</span></a>
+<a class="sourceLine" id="cb11-53" title="53"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb11-54" title="54"><span class="co">#&gt;  outputs/exampleEdinburgh_5_dataFilter-unfiltered_20200710-131316.xlsx</span></a>
+<a class="sourceLine" id="cb11-55" title="55"><span class="co">#&gt;  outputs/exampleEdinburgh_5_dataFilter-filtered_20200710-131317.csv</span></a>
+<a class="sourceLine" id="cb11-56" title="56"><span class="co">#&gt;  outputs/exampleEdinburgh_5_dataFilter-filtered_20200710-131317.RDS</span></a>
+<a class="sourceLine" id="cb11-57" title="57"><span class="co">#&gt;  outputs/exampleEdinburgh_5_dataFilter-validate_20200710-131318.xlsx</span></a></code></pre></div>
+</div>
+<div id="data-tidy" class="section level3">
+<h3>3.6. Data tidy</h3>
+<p>The final step. The function <code>dataTidy()</code> generates a single tidied output based on any combination of the filtered, validated, unfiltered and no detail data.</p>
+<p>Note that multiple outputs from <code>dataWrangle()</code> and <code>dataFilter()</code> were spreadsheets (.xlsx extension). You may manually adjust the <em>desc</em> column in these and reimport them in this step.</p>
+<p>The input argument is a list of the objects to be imported. They can either be imported locally, as objects from the R environment, or from the manually adjusted spreadsheets. The code chunk below focusses on the outputs of <code>dataFilter()</code> only. Vignettes 3 and 4 introduce a number of alternative inputs.</p>
+<p>The tidied geotagged dataset is saved in .RDS, and .csv for use in a range of applications. To export as a shapefile it is necessary to split the geotagged dataset by geometry type first.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">dlTidy &lt;-<span class="st"> </span><span class="kw">dataTidy</span>(dlFilter)</a>
+<a class="sourceLine" id="cb12-2" title="2"></a>
+<a class="sourceLine" id="cb12-3" title="3">dlTidy <span class="op">%&gt;%</span><span class="st"> </span>dataSummary</a>
+<a class="sourceLine" id="cb12-4" title="4"><span class="co">#&gt; $class</span></a>
+<a class="sourceLine" id="cb12-5" title="5"><span class="co">#&gt; [1] &quot;list&quot;             &quot;OSMtidy_dataTidy&quot;</span></a>
+<a class="sourceLine" id="cb12-6" title="6"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb12-7" title="7"><span class="co">#&gt; $summary</span></a>
+<a class="sourceLine" id="cb12-8" title="8"><span class="co">#&gt; # A tibble: 4 x 3</span></a>
+<a class="sourceLine" id="cb12-9" title="9"><span class="co">#&gt;   data                 total percent</span></a>
+<a class="sourceLine" id="cb12-10" title="10"><span class="co">#&gt;   &lt;chr&gt;                &lt;int&gt;   &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb12-11" title="11"><span class="co">#&gt; 1 unfiltered             569    3.33</span></a>
+<a class="sourceLine" id="cb12-12" title="12"><span class="co">#&gt; 2 removeKeywordFilters    37    0.22</span></a>
+<a class="sourceLine" id="cb12-13" title="13"><span class="co">#&gt; 3 remove                 300    1.76</span></a>
+<a class="sourceLine" id="cb12-14" title="14"><span class="co">#&gt; 4 filtered             16164   94.7 </span></a>
+<a class="sourceLine" id="cb12-15" title="15"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb12-16" title="16"><span class="co">#&gt; $summaryFiltered</span></a>
+<a class="sourceLine" id="cb12-17" title="17"><span class="co">#&gt; # A tibble: 190 x 2</span></a>
+<a class="sourceLine" id="cb12-18" title="18"><span class="co">#&gt;    desc                           total</span></a>
+<a class="sourceLine" id="cb12-19" title="19"><span class="co">#&gt;    &lt;chr&gt;                          &lt;int&gt;</span></a>
+<a class="sourceLine" id="cb12-20" title="20"><span class="co">#&gt;  1 Amenity; ATM                      14</span></a>
+<a class="sourceLine" id="cb12-21" title="21"><span class="co">#&gt;  2 Amenity; Bicycle parking          49</span></a>
+<a class="sourceLine" id="cb12-22" title="22"><span class="co">#&gt;  3 Amenity; Bike rental point         6</span></a>
+<a class="sourceLine" id="cb12-23" title="23"><span class="co">#&gt;  4 Amenity; Car wash                  2</span></a>
+<a class="sourceLine" id="cb12-24" title="24"><span class="co">#&gt;  5 Amenity; Fire hydrant             64</span></a>
+<a class="sourceLine" id="cb12-25" title="25"><span class="co">#&gt;  6 Amenity; Flood defence             2</span></a>
+<a class="sourceLine" id="cb12-26" title="26"><span class="co">#&gt;  7 Amenity; Fountain (decorative)     1</span></a>
+<a class="sourceLine" id="cb12-27" title="27"><span class="co">#&gt;  8 Amenity; Fuel station              1</span></a>
+<a class="sourceLine" id="cb12-28" title="28"><span class="co">#&gt;  9 Amenity; Garages and sheds       325</span></a>
+<a class="sourceLine" id="cb12-29" title="29"><span class="co">#&gt; 10 Amenity; Information board         1</span></a>
+<a class="sourceLine" id="cb12-30" title="30"><span class="co">#&gt; # ... with 180 more rows</span></a>
+<a class="sourceLine" id="cb12-31" title="31"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb12-32" title="32"><span class="co">#&gt; $unfiltered</span></a>
+<a class="sourceLine" id="cb12-33" title="33"><span class="co">#&gt; # A tibble: 5 x 2</span></a>
+<a class="sourceLine" id="cb12-34" title="34"><span class="co">#&gt;   feature  total</span></a>
+<a class="sourceLine" id="cb12-35" title="35"><span class="co">#&gt;   &lt;chr&gt;    &lt;int&gt;</span></a>
+<a class="sourceLine" id="cb12-36" title="36"><span class="co">#&gt; 1 amenity      1</span></a>
+<a class="sourceLine" id="cb12-37" title="37"><span class="co">#&gt; 2 building   531</span></a>
+<a class="sourceLine" id="cb12-38" title="38"><span class="co">#&gt; 3 highway      6</span></a>
+<a class="sourceLine" id="cb12-39" title="39"><span class="co">#&gt; 4 landuse     12</span></a>
+<a class="sourceLine" id="cb12-40" title="40"><span class="co">#&gt; 5 &lt;NA&gt;        19</span></a>
+<a class="sourceLine" id="cb12-41" title="41"></a>
+<a class="sourceLine" id="cb12-42" title="42">dlTidy<span class="op">$</span>filtered</a>
+<a class="sourceLine" id="cb12-43" title="43"><span class="co">#&gt; # A tibble: 16,164 x 3</span></a>
+<a class="sourceLine" id="cb12-44" title="44"><span class="co">#&gt;    osm_id   desc                                                        geometry</span></a>
+<a class="sourceLine" id="cb12-45" title="45"><span class="co">#&gt;    &lt;chr&gt;    &lt;chr&gt;                                                 &lt;GEOMETRY [°]&gt;</span></a>
+<a class="sourceLine" id="cb12-46" title="46"><span class="co">#&gt;  1 3195818~ Amenity; Floo~ MULTILINESTRING ((-3.199711 55.9629, -3.199508 55.96~</span></a>
+<a class="sourceLine" id="cb12-47" title="47"><span class="co">#&gt;  2 3343407~ Barrier; Wall  LINESTRING (-3.167914 55.96796, -3.16797 55.96798, -~</span></a>
+<a class="sourceLine" id="cb12-48" title="48"><span class="co">#&gt;  3 3418179~ Barrier; Wall  LINESTRING (-3.199838 55.96309, -3.199801 55.96312, ~</span></a>
+<a class="sourceLine" id="cb12-49" title="49"><span class="co">#&gt;  4 3418179~ Barrier; Wall     LINESTRING (-3.199572 55.9636, -3.199394 55.96358)</span></a>
+<a class="sourceLine" id="cb12-50" title="50"><span class="co">#&gt;  5 3418179~ Barrier; Wall      LINESTRING (-3.199402 55.96393, -3.19923 55.9639)</span></a>
+<a class="sourceLine" id="cb12-51" title="51"><span class="co">#&gt;  6 3418179~ Barrier; Wall    LINESTRING (-3.199641 55.96347, -3.199465 55.96344)</span></a>
+<a class="sourceLine" id="cb12-52" title="52"><span class="co">#&gt;  7 3418179~ Barrier; Wall    LINESTRING (-3.199203 55.96431, -3.199179 55.96431)</span></a>
+<a class="sourceLine" id="cb12-53" title="53"><span class="co">#&gt;  8 3418180~ Barrier; Wall    LINESTRING (-3.199269 55.96418, -3.199168 55.96417)</span></a>
+<a class="sourceLine" id="cb12-54" title="54"><span class="co">#&gt;  9 3418180~ Barrier; Wall    LINESTRING (-3.199607 55.96354, -3.199422 55.96351)</span></a>
+<a class="sourceLine" id="cb12-55" title="55"><span class="co">#&gt; 10 3418180~ Barrier; Wall    LINESTRING (-3.199435 55.96386, -3.199261 55.96384)</span></a>
+<a class="sourceLine" id="cb12-56" title="56"><span class="co">#&gt; # ... with 16,154 more rows</span></a>
+<a class="sourceLine" id="cb12-57" title="57"></a>
+<a class="sourceLine" id="cb12-58" title="58"><span class="kw">dataExport</span>(<span class="dt">data =</span> dlTidy, <span class="dt">name =</span> locationName)</a>
+<a class="sourceLine" id="cb12-59" title="59"><span class="co">#&gt; Files saved as:</span></a>
+<a class="sourceLine" id="cb12-60" title="60"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb12-61" title="61"><span class="co">#&gt;  outputs/exampleEdinburgh_6_dataTidy-unfiltered_20200710-131322.RDS</span></a>
+<a class="sourceLine" id="cb12-62" title="62"><span class="co">#&gt;  outputs/exampleEdinburgh_6_dataTidy-removeKeywordFilters_20200710-131322.RDS</span></a>
+<a class="sourceLine" id="cb12-63" title="63"><span class="co">#&gt;  outputs/exampleEdinburgh_6_dataTidy-remove_20200710-131322.RDS</span></a>
+<a class="sourceLine" id="cb12-64" title="64"><span class="co">#&gt;  outputs/exampleEdinburgh_6_dataTidy-filtered_20200710-131322.RDS</span></a>
+<a class="sourceLine" id="cb12-65" title="65"><span class="co">#&gt;  outputs/exampleEdinburgh_6_dataTidy-filtered_20200710-131322.csv</span></a></code></pre></div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
