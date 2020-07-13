@@ -22,7 +22,7 @@ The simple and easy to follow workflow consists of six steps:
 &nbsp;
 
 <p align="center">
-<img src="OSMtidy-workflow.png" width="50%" height="50%">
+<img src="OSMtidy-workflow.png">
 </p
 
 There are four vignettes designed to get you on your way:
@@ -45,7 +45,7 @@ Filters are central to OSMtidy. A year of development – across six major UK ci
 &nbsp;
 
 <p align="center">
-<img caption = "OSMtidy workflow" src="OSMtidy-filtersTree.png" width="50%" height="50%">
+<img caption = "OSMtidy workflow" src="OSMtidy-filtersTree.png">
 </p>
 
 ## Background
