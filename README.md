@@ -23,10 +23,10 @@ ADD IMAGE ONE HERE
 
 There are four vignettes designed to get you on your way:
 
-+ **Vignette 1** [Getting started](vignettes/Vignette 1, Getting started)
-+ **Vignette 2** [Walkthrough](vignettes/Vignette 2, Walkthrough
-+ **Vignette 3** [Filters](vignettes/Vignette 3, Filters)
-+ **Vignette 4** [Editing outputs](vignettes/Vignette 4, Editting outputs)
++ **Vignette 1** [Getting started](vignettes/Vignette 1, Getting started.html)
++ **Vignette 2** [Walkthrough](vignettes/Vignette 2, Walkthrough.html)
++ **Vignette 3** [Filters](vignettes/Vignette 3, Filters.html)
++ **Vignette 4** [Editing outputs](vignettes/Vignette 4, Editting outputs.html)
 
 
 ## Filters
