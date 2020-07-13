@@ -19,7 +19,11 @@ The simple and easy to follow workflow consists of six steps:
 5.	**Filter** The physical objects are filtered and renamed to follow a simple naming convention
 6.	**Tidy** Collates the outputs to form a streamlined database of physical objects
 
+&nbsp;
+
+<p align="center">
 <img src="OSMtidy-workflow.png" width="50%" height="50%">
+</p
 
 There are four vignettes designed to get you on your way:
 
@@ -38,8 +42,11 @@ Filters are central to OSMtidy. A year of development – across six major UK ci
 
 [1] Edinburgh, Glasgow, Belfast, Manchester, Bristol and London
 
-<img src="OSMtidy-filtersTree.png" width="50%" height="50%">
+&nbsp;
 
+<p align="center">
+<img caption = "OSMtidy workflow" src="OSMtidy-filtersTree.png" width="50%" height="50%">
+</p>
 
 ## Background
 OSMtidy is being developed as part of the £1-million Water Resilient Cities project. The project looks to understand, quantify, and explore solutions to the challenge of climate change and adaptive water management. Designed to explore the impact of natural and anthropogenic hazards, one of the main outputs of the project is the Urban Systems Abstraction Hierarchy [Bedinger et al., 2020](https://doi.org/10.1029/2019EF001389). Effectively a type of systems map, the Urban Systems Abstraction Hierarchy captures the functional connections between the physical and abstract. Developed in a UK context, the Urban Systems Abstraction Hierarchy recognises 137 different physical objects in the urban environment. For application at the city-wide level, acquiring such data represented a major obstacle. In response, OSMtidy was developed, allowing large messy OpenStreetMaps data to be quickly tidied into a streamlined database of physical objects with a simple naming convention. 
