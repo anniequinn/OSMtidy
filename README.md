@@ -1,6 +1,6 @@
 # OSMtidy
 
-<img align="left" src="OSMtidy.png" height = "10%" width = "10%"> 
+<img align="left" src="images/OSMtidy.png" height = "10%" width = "10%"> 
 
 ## Overview
 OSMtidy is a software code, created in R. With OSMtidy, large messy OpenStreetMaps data can be quickly tidied into a streamlined dataset with a simple naming convention. OSMtidy can be applied at any scale, from a small village to cities the size of London.
@@ -24,7 +24,7 @@ The simple and easy to follow workflow consists of six steps:
 &nbsp;
 
 <p align="center">
-<img src="OSMtidy-workflow.png" height = "50%" width = "50%">
+<img src="images/OSMtidy-workflow.png" height = "50%" width = "50%">
 </p
 
 There are four vignettes designed to get you on your way:
@@ -47,7 +47,7 @@ Filters are central to OSMtidy. A year of development – across six major UK ci
 &nbsp;
 
 <p align="center">
-<img src="OSMtidy-filtersTree.png" width = "50%" height = "50%">
+<img src="images/OSMtidy-filtersTree.png" width = "50%" height = "50%">
 </p>
 
 ## Background
