@@ -12,37 +12,37 @@ OSMtidy is a software code, created in R. With OSMtidy, large messy OpenStreetMa
 
 The simple and easy to follow workflow consists of six steps: 
 
-1.	Input A shapefile outlining the location
-2.	Extract Spatial data – inside the shapefiles ‘bounding box’ – is extracted from OpenStreetMaps servers via the R package osmdata
-3.	Cut The extracted data is ‘cookie cutter’-ed to the shapefile extent
-4.	Wrangle The data is transformed into a suitable format for filtering
-5.	Filter The physical objects are filtered and renamed to follow a simple naming convention
-6.	Tidy Collates the outputs to form a streamlined database of physical objects
+1.	**Input** A shapefile outlining the location
+2.	**Extract** Spatial data – inside the shapefiles ‘bounding box’ – is extracted from [OpenStreetMaps](https://www.openstreetmap.org/) servers via the R package [osmdata](https://cran.r-project.org/web/packages/osmdata/index.html)
+3.	**Cut** The extracted data is ‘cookie cutter’-ed to the shapefile extent
+4.	**Wrangle** The data is transformed into a suitable format for filtering
+5.	**Filter** The physical objects are filtered and renamed to follow a simple naming convention
+6.	**Tidy** Collates the outputs to form a streamlined database of physical objects
 
 ADD IMAGE ONE HERE
 
 There are four vignettes designed to get you on your way:
 
-+ **Vignette 1** Getting started
-+ **Vignette 2** Walkthrough
-+ **Vignette 3** Filters
-+ **Vignette 4** Editing outputs
++ **Vignette 1** [Getting started](vignettes/Vignette 1, Getting started)
++ **Vignette 2** [Walkthrough](vignettes/Vignette 2, Walkthrough
++ **Vignette 3** [Filters](vignettes/Vignette 3, Filters)
++ **Vignette 4** [Editing outputs](vignettes/Vignette 4, Editting outputs)
 
 
 ## Filters
-Filters are central to OSMtidy. A year of development – across six major UK cities[^1]– has yielded 1232 filters capable of identifying 540 unique physical objects, 44 key word filters (for manual validation) and 83 object types for removal. There are three ways to use the filters:
+Filters are central to OSMtidy. A year of development – across six major UK cities[1]– has yielded 1232 filters capable of identifying 540 unique physical objects, 44 key word filters (for manual validation) and 83 object types for removal. There are three ways to use the filters:
 
-1. Use the predetermined filters in filters.xlsx
+1. Use the predetermined filters in [filters.xlsx](filters.xlsx)
 2. Fine-tune the predetermined filters for your application
-3. Start from scratch with your own filters using filtersTemplate.xlsx and the guide in Vignette 3
+3. Start from scratch with your own filters using [filtersTemplate.xlsx](filters.xlsx) and the guide in Vignette 3
 
-[^1]: Edinburgh, Glasgow, Belfast, Manchester, Bristol and London
+[1] Edinburgh, Glasgow, Belfast, Manchester, Bristol and London
 
 ADD IMAGE TWO HERE
 
 
 ## Background
-OSMtidy is being developed as part of the £1-million Water Resilient Cities project. The project looks to understand, quantify, and explore solutions to the challenge of climate change and adaptive water management. Designed to explore the impact of natural and anthropogenic hazards, one of the main outputs of the project is the Urban Systems Abstraction Hierarchy [REF]. Effectively a type of systems map, the Urban Systems Abstraction Hierarchy captures the functional connections between the physical and abstract. Developed in a UK context, the Urban Systems Abstraction Hierarchy recognises XXX different physical objects in the urban environment. For application at the city-wide level, acquiring such data represented a major obstacle. In response, OSMtidy was developed, allowing large messy OpenStreetMaps data to be quickly tidied into a streamlined database of physical objects with a simple naming convention. 
+OSMtidy is being developed as part of the £1-million Water Resilient Cities project. The project looks to understand, quantify, and explore solutions to the challenge of climate change and adaptive water management. Designed to explore the impact of natural and anthropogenic hazards, one of the main outputs of the project is the Urban Systems Abstraction Hierarchy [Bedinger et al., 2020](https://doi.org/10.1029/2019EF001389). Effectively a type of systems map, the Urban Systems Abstraction Hierarchy captures the functional connections between the physical and abstract. Developed in a UK context, the Urban Systems Abstraction Hierarchy recognises 137 different physical objects in the urban environment. For application at the city-wide level, acquiring such data represented a major obstacle. In response, OSMtidy was developed, allowing large messy OpenStreetMaps data to be quickly tidied into a streamlined database of physical objects with a simple naming convention. 
 
 
 ## Acknowledgements 
