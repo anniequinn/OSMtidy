@@ -1,5 +1,7 @@
 # OSMtidy
 
+<img align="left" src="OSMtidy.png" height = "10%" width = "10%"> 
+
 ## Overview
 OSMtidy is a software code, created in R. With OSMtidy, large messy OpenStreetMaps data can be quickly tidied into a streamlined dataset with a simple naming convention. OSMtidy can be applied at any scale, from a small village to cities the size of London.
 
@@ -22,7 +24,7 @@ The simple and easy to follow workflow consists of six steps:
 &nbsp;
 
 <p align="center">
-<img src="OSMtidy-workflow.png">
+<img src="OSMtidy-workflow.png" height = "50%" width = "50%">
 </p
 
 There are four vignettes designed to get you on your way:
@@ -40,12 +42,12 @@ Filters are central to OSMtidy. A year of development – across six major UK ci
 2. Fine-tune the predetermined filters for your application
 3. Start from scratch with your own filters using [filtersTemplate.xlsx](filters.xlsx) and the guide in [Vignette 3](vignettes/Vignette%203%2C%20Filters.html)
 
-[1] Edinburgh, Glasgow, Belfast, Manchester, Bristol and London
+[1] *Edinburgh, Glasgow, Belfast, Manchester, Bristol and London*
 
 &nbsp;
 
 <p align="center">
-<img caption = "OSMtidy workflow" src="OSMtidy-filtersTree.png">
+<img src="OSMtidy-filtersTree.png" width = "50%" height = "50%">
 </p>
 
 ## Background
@@ -56,7 +58,13 @@ OSMtidy is being developed as part of the £1-million Water Resilient Cities pro
 The development of OSMtidy is funded by UKRI EPSRC as part of the *Water Resilient Cities project*, grant number EP/N030419/1, as well as an associated EPSRC Impact Acceleration Fund, *Urban system response and recovery: Development of an online tool to explore the impact of COVID-19*.
 
 
-## Citation
-If you have any questions about using or running the code, or wish to access pre-filtered outputs for UK city locations, please contact a.visser-quinn@hw.ac.uk.
+## Contributions & citation
+**Author** Annie Visser-Quinn
 
-Please cite: *Annie Visser-Quinn. (2020) OSMtidy V0.0.4, Edinburgh, Scotland. Available from: https://github.com/avisserquinn/OSMtidy.*
+**Filters development** Annie Visser-Quinn and Melissa Bedinger
+
+**Contact** If you have any questions about using or running the code, or wish to access pre-filtered outputs for UK city locations, please contact a.visser-quinn@hw.ac.uk. 
+
+**Please cite** Annie Visser-Quinn and Melissa Bedinger. (2020) OSMtidy V0.0.4, Edinburgh, Scotland. Available from: https://github.com/avisserquinn/OSMtidy.
+
+
