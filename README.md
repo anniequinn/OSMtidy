@@ -65,6 +65,4 @@ The development of OSMtidy is funded by UKRI EPSRC as part of the *Water Resilie
 
 **Contact** If you have any questions about using or running the code, or wish to access pre-filtered outputs for UK city locations, please contact a.visser-quinn@hw.ac.uk. 
 
-**Please cite** Annie Visser-Quinn and Melissa Bedinger. (2020) OSMtidy V0.0.4, Edinburgh, Scotland. Available from: https://github.com/avisserquinn/OSMtidy.
-
-
+**Please cite** Annie Visser-Quinn and Melissa Bedinger. (2020) OSMtidy V0.0.4, Edinburgh, Scotland. doi:10.5281/zenodo.3941990 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3941990.svg)](https://doi.org/10.5281/zenodo.3941990)
