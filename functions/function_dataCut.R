@@ -30,7 +30,7 @@ dataCut <- function(dataExtracted, dataShapefile) {
           x %>% 
             as_tibble %>% 
             st_as_sf %>% 
-            st_join(dataShapefile, left = FALSE)
+            st_join(dataShapefile %>% as_tibble %>% st_as_sf, left = FALSE)
         )
       ) 
       
