@@ -53,6 +53,14 @@ function_dataImport <- function(vecExcel) {
 function_prepFiltered <- function(data) { 
   
   if(sum(sapply(data, function(x) { x$geometry %>% is.character })) > 0) {
+    
+    if(sum(names(data[[1]]) %in% "desc") == 1) {
+      
+      data <- 
+        data %>%
+        modify(. %>% filter(!is.na(desc)))
+      
+    }
   
   data <- 
       data %>% 
@@ -66,6 +74,7 @@ function_prepFiltered <- function(data) {
   
   output <- 
     data %>%
+    rmEmptyList() %>%
     modify(. %>% rowwise %>% st_as_sf %>% ungroup) %>%
     mapedit:::combine_list_of_sf() %>% 
     as_tibble() %>%

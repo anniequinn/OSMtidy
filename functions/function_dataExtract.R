@@ -1,4 +1,5 @@
-dataExtract <- function(dataShapefile, timeout = 300, memsize = 1073741824) {
+dataExtract <- function(dataShapefile, features = "functions/features.txt", 
+                        timeout = 300, memsize = 1073741824) {
   
   source("functions/functions_internal.R", local = TRUE)
 
@@ -10,7 +11,7 @@ dataExtract <- function(dataShapefile, timeout = 300, memsize = 1073741824) {
   # -------------------------------------------------------------------------
   
   # Read in features
-  features = scan("functions/features.txt", character(), quote = "", quiet = TRUE)
+  features = scan(features, character(), quote = "", quiet = TRUE)
   
   # Create empty lists
   points = list()
