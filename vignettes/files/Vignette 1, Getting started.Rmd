@@ -1,0 +1,99 @@
+---
+title: "OSMtidy - Vignette 1, Getting started"
+author: "Dr Annie Visser-Quinn, a.visser-quinn@hw.ac.uk"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{OSMtidy - Vignette 1, Getting started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+knitr::opts_knit$set(
+  root.dir = normalizePath('../')
+  )
+
+library(sf)
+library(tidyverse)
+```
+
+
+## 1. Prerequisites
+- OSMtidy V0.0.41
+- R version 3.6.3 or newer
+- R packages `tidyverse` and `sf`
+
+## 2. Data
+The input to OSMtidy is a shapefile, or polygon, outline of a given location. This version of OSMtidy is bundled with a shapefile from the UK's Ordinance Survey Open Data (https://www.ordnancesurvey.co.uk/business-government/products/boundaryline). The data is provided under the UK Government's OGL licence; see *LICENCE_OGL3.mhtml* in the *shapefiles* folder for details.
+
+```{r}
+list.files("shapefiles", pattern = "unitary_ward")
+```
+
+This vignette provides an example of how to prepare your shapefiles for use in OSMtidy.
+
+<br>
+
+## 3. Tidy data
+The first step is to read the data in, we do this using the function `st_read()` from the R package `sf`.
+
+```{r}
+shp <- st_read("shapefiles/district_borough_unitary_ward_region.shp", quiet = TRUE)
+shp
+```
+
+<br>
+
+Next, we need to choose a location to focus on. The OS data is at the ward level - in these vignettes we will look at a ward in the *City of Edinburgh (Scotland)* called *Leith Walk*.
+
+In the next code chunk, we reduce the data down to the location of interest using `tidyverse` notation.
+
+```{r} 
+shp <- 
+  shp %>%
+  filter(str_detect(FILE_NAME, "CITY_OF_EDINBURGH")) %>% 
+  filter(str_detect(NAME, "Leith Walk")) %>%
+  select(geometry)
+shp
+```
+<br>
+
+Because the shapefile was imported to R as a spatial feature, using `sf`, we can plot it in ggplot using `geom_sf()`.
+
+```{r}
+shp %>% ggplot() + geom_sf()
+```
+
+<br>
+
+You can simplify the jagged outlines of the ward using `st_simplify()`. The final step is to transform the projection to EPSG:4326 (https://epsg.io/4326).
+
+```{r}
+shp <- shp %>% st_simplify(dTolerance = 25) %>% st_transform(4326)
+shp 
+
+shp %>% ggplot() + geom_sf()
+```
+
+<br>
+
+## 4. Export shapefile
+
+The shapefile is now ready for use in OSMtidy. THe shapefile is exported using the `sf` function `st_write()`. When using OSMtidy, all the associated shapefile files need to be placed in the shapefile folder in the OSMtidy directory.
+
+```{r} 
+shp %>% st_write("shapefiles/exampleEdinburgh.shp", delete_dsn = TRUE, delete_layer = TRUE, quiet = TRUE)
+```
+
+<br>
+
+Now you're ready to run OSMtidy! See Vignette 2 for a general walkthrough.

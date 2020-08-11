@@ -1,0 +1,235 @@
+---
+title: "OSMtidy - Vignette 3, Filters"
+author: "Dr Annie Visser-Quinn, a.visser-quinn@hw.ac.uk"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{OSMtidy - Vignette 3, Filters}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+knitr::opts_knit$set(
+  root.dir = normalizePath('../')
+  )
+
+library(tidyverse)
+library(lubridate)
+library(osmdata)
+library(sf)
+library(pbapply)
+library(progress)
+library(data.table)
+library(readxl)
+library(openxlsx)
+library(mapedit)
+library(xlsx)
+```
+```{r, include = FALSE}
+source("functions/functions.R")
+```
+
+## 1. Introduction
+
+OSMtidy aims to tidy up physical object data extracted from OpenStreetMaps. Steps 1-4 cover the extraction of this data and wrangling into a suitable format. Step 5, data filtering, is central to OSMtidy. Through filters, a multi-column database of physical objects can be converted into a simple two-column geotagged database - describing the name and geometry/ location of the object. 
+
+There are approximately 1250 predefined filters in OSMtidy. These can be explored and modified via the spreadsheet filters.xlsx in the OSMtidy directory. The filters are provided in spreadsheet form for ease of use - OSMtidy is primarily intended to be used by non-specialists and non-coders. The following figures provide a brief overview of the spreadsheet layout and navigation. 
+
+![1.1 *filters.xlsx* overview and column descriptions.](files/vignette3images/Slide1.png){#id .class width=120% height=120%}  
+
+&nbsp;
+
+![1.2. Navigating *filters.xlsx*.](files/vignette3images/Slide2.png){#id .class width=120% height=120%}  
+
+&nbsp;
+
+
+## 2. Creating your first filter
+This vignette uses a subset of data from the Edinburgh ward examplar (see Vignettes 1 and 2). The input file is located within the *vignettes* folder.
+
+```{r}
+dlWrangle <- readRDS("vignettes/files/vignette3Input_dataWrangle.RDS")
+
+dlWrangle$dataWrangled
+```
+
+There are 380 objects in this dataset. In the output above, a header of the dataset is printed. A number of parks are listed, so let's start by creating a filter for parks.
+
+- Open *filterTemplate.xlsx* and save it as *filters (1).xlsx* in the example folder. 
+- To search all columns, leave *searchColumn_contains blank*
+- Use *park* as the *searchTerm*
+- Set *validate* to *TRUE*
+- Fill in *name1*, *name2* and *descTerm* - this example uses names consistent with *filters.xlsx*
+- Save the spreadsheet
+
+![2.1. First filter, set up to find parks.](files/vignette3images/001.png){#id .class width=120% height=120%} 
+
+&nbsp;
+
+Now that the first filter is ready, you can run it in R. Because we set validate to TRUE, we want to export the output to explore the validate spreadsheet.
+
+```{r}
+dlFilter <- dlWrangle %>% dataFilter("vignettes/files/vignette3Input_filters1.xlsx")
+
+dlFilter %>% dataExport(., "filterExample_round1")
+```
+
+&nbsp;
+
+The *filterExample_round1_5_dataFilter-validate* spreadsheet can be found in the *outputs* folder. It should look something like the figure below.
+
+![2.2. Validate spreadsheet for the first filter.](files/vignette3images/012.png){#id .class width=120% height=120%} 
+
+&nbsp;
+
+Entries 2-9 show that the filter did capture the parks. Parking has also been picked up because the filter was *not specific enough*. Section 3 explores the iterative process to fix this.
+
+
+## 3. Adjusting filters - An iterative process
+Open *filters (1).xlsx* and add a more specific filter for parking (see figure below). Add this filter before the park filter. OSMtidy is iterative and applies filters in the same order as they are in the spreadsheet. Save this new filter as *filters (2).xlsx* and run the R code again.
+
+&nbsp;
+
+![3.1. Adding a second more specific filter.](files/vignette3images/016.png){#id .class width=120% height=120%} 
+
+```{r}
+dlFilter <- dlWrangle %>% dataFilter("vignettes/files/vignette3Input_filters2.xlsx")
+
+dlFilter %>% dataExport(., "filterExample_round2")
+```
+
+&nbsp;
+
+The new *validate* spreadsheet has two tabs. Clicking on the drop-down arrow shows that the *parking* filter picked up three different objects. 
+
+![3.2. *Validate* spreadsheet after adding a second filter.](files/vignette3images/026.png){#id .class width=120% height=120%}
+
+&nbsp;
+
+Update the filters spreadsheet again, and rerun the R code.
+
+![3.3. Third iteration of the *filters* spreadsheet. Two new filters are added.](files/vignette3images/030.png){#id .class width=120% height=120%}
+
+```{r}
+dlFilter <- dlWrangle %>% dataFilter("vignettes/files/vignette3Input_filters3.xlsx")
+
+dlFilter %>% dataExport(., "filterExample_round3")
+```
+
+![3.4. *Validate* spreadsheet after the third iteration. There are now three tabs. Use the drop-down menu to determine if the filter identified unique objects.](files/vignette3images/038.png){#id .class width=120% height=120%}
+
+&nbsp;
+
+![3.4. The bicycle_parking column reveals additional information that could be filtered for.](files/vignette3images/040.png){#id .class width=120% height=120%}
+
+&nbsp;
+
+![3.5. In the second tab, the parking column reveals additional information that could be filtered for.](files/vignette3images/045.png){#id .class width=120% height=120%}
+
+&nbsp;
+
+These outputs show that the filters have improved, but they aren't quite specific enough. More detailed bicycle parking filters might be useful, and filters for underground parking are needed. This requires a fourth iteration of filters. 
+
+![3.6. Fourth iteration of the *filters* spreadsheet. Three new filters are added and *validate* is changed for *park*.](files/vignette3images/046.png){#id .class width=120% height=120%}
+
+```{r}
+dlFilter <- dlWrangle %>% dataFilter("vignettes/files/vignette3Input_filters4.xlsx")
+
+dlFilter %>% dataExport(., "filterExample_round4")
+```
+
+&nbsp;
+
+![3.7. *Validate* spreadsheet after the fourth iteration, tab 1. The object descriptions match two of the new filters.](files/vignette3images/054.png){#id .class width=120% height=120%}
+
+&nbsp;
+
+![3.8. Tab 2. With the new bicycle parking filter the object descriptions agree with the filters.](files/vignette3images/059.png){#id .class width=120% height=120%}
+
+&nbsp;
+
+![3.9. Tab 3. The same is true for parking.](files/vignette3images/060.png){#id .class width=120% height=120%}
+
+&nbsp;
+
+Through these four iterations, the *park* filter was refined to become specific enough to capture the range of similar objects. 
+
+## 4. Identifying new filters
+Whether starting a filter spreadsheet from scratch, or using the pre-determined filters in *filters.xlsx*, some objects will be missed. To identify new filters, open the *unfiltered* spreadsheet in the *outputs* folder.
+
+![4.1. Two tabs of unfiltered objects.](files/vignette3images/070.png){#id .class width=120% height=120%}
+
+&nbsp;
+
+These objects can be manually updated, by changing the *desc* column (see Vignette 4), or by identifying new filters. In the figure below, a number of new filters are added in an attempt to capture some of these objects. The filters which have been validation (in section 3) are changed to *validate FALSE*.
+
+![4.2. Fifth iteration of the *filters* spreadsheet. Four new filters are added and *validate* is updated.](files/vignette3images/074.png){#id .class width=120% height=120%}
+
+```{r}
+dlFilter <- dlWrangle %>% dataFilter("vignettes/files/vignette3Input_filters5.xlsx")
+
+dlFilter %>% dataExport(., "filterExample_round5")
+```
+
+&nbsp;
+
+![4.3. *Validate* spreadsheet after the fifth iteration. Filters in the first tab appear successful.](files/vignette3images/080.png){#id .class width=120% height=120%}
+
+&nbsp;
+
+![4.4. Filters in the second tab also appear valid.](files/vignette3images/081.png){#id .class width=120% height=120%}
+
+&nbsp;
+
+All four of the new filters are validated. To look at what new filters are required, check the *unfiltered* spreadsheet again. A final iteration of the filters spreadsheet is explored below.
+
+![4.5. Final iteration of the *filters* spreadsheet. Three new filters are added and *validate* is updated.](files/vignette3images/074.png){#id .class width=120% height=120%}
+
+```{r}
+dlFilter <- dlWrangle %>% dataFilter("vignettes/files/vignette3Input_filters6.xlsx")
+
+dlFilter %>% dataExport(., "filterExample_round6")
+```
+
+## 5. Manually updating the *validate* spreadsheet
+In some instances, it may not be possible to identify a specific enough filter. In these instances, you could specify the osm_id as a filter, or, you can manually edit the validate output.
+
+![5.1. *Validate* spreadsheet after the final iteration. The descriptor childcare does not necessarily reflect the object information.](files/vignette3images/098.png){#id .class width=120% height=120%}
+
+&nbsp;
+
+![5.2. The *validate* spreadsheet *desc* column is updated to reflect the additional information available.](files/vignette3images/103.png){#id .class width=120% height=120%}
+
+&nbsp;
+
+The validate spreadsheet can be editted for a number of reasons:
+
+- You want to remove the object, change the entry in *desc* to *remove*
+- It was a *Keyword filter* - a filter which looks for a keyword and needs to be manually adjusted. If *Keyword filter* is not removed from *desc*, it won't be included in the final OSMtidy output
+- To avoid rerunning filters - e.g. for a city location that takes multiple hours to run filters
+
+These changes can be imported as part of the final step in OSMtidy, using the function `dataTidy()`.
+
+```{r, eval = FALSE}
+inputList <- list(dlFilter$filtered,
+                  "outputs/filterExample_round6_5_dataFilter-validate_20200710-130213.xlsx")
+```
+```{r, include = FALSE}
+inputList <- list(dlFilter$filtered,
+                  "vignettes/files/vignette3Input_round6_5_dataFilter-validate_20200710-130213.xlsx")
+```
+```{r}
+dlTidy <- dataTidy(inputList)
+dlTidy %>% dataSummary
+```
+
+The output can be saved using `dataExport()`. The fourth vignette explores how to edit other spreadsheet outputs from OSMtidy.

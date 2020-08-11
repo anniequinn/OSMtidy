@@ -1,0 +1,160 @@
+---
+title: "OSMtidy - Vignette 4, Editing outputs"
+author: "Dr Annie Visser-Quinn, a.visser-quinn@hw.ac.uk"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{OSMtidy - Vignette 4, Editing outputs}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+knitr::opts_knit$set(
+  root.dir = normalizePath('../')
+  )
+
+library(tidyverse)
+library(sf)
+```
+
+Data wrangling (step 4) and filtering (step 5) both provide a number of outputs which can be editted. This is entirely optional. For ease of use, these outputs are .xlsx spreadsheets. This vignette provides a step-by-step guide on how to go about editting these spreadsheet outputs. The final section shows how these editted spreadsheets may be combined into a final output using the function `dataTidy()`.
+
+**Everything in this vignette is completely optional - you may edit all of the spreadsheets, none of them, or some and not others.**
+
+## 1. Data wrangle output - no detail
+A number of OpenStreetMap physical objects have no detail associated with them. In step 4, data wrangling, these objects are gathered together and form a separate output.
+
+```{r, echo = FALSE, eval = TRUE}
+dlWrangle <- readRDS("vignettes/files/exampleEdinburgh/exampleEdinburgh_4_dataWrangle.RDS")
+```
+```{r}
+dlWrangle %>% names
+
+dlWrangle$noDetail
+```
+
+Using the function `dataExport()`, *noDetail* is saved as an .xlsx spreadsheet in the outputs folder with the suffix *4_dataWrangle-noDetail.xlsx*. In the spreadsheet, each tab contains all the objects associated with a specific OpenStreetMaps *feature*. There are 5 columns in each tab:
+
+- *osm_id* Unique OpenStreetMaps identifier
+- *desc* A blank descriptive column 
+- *geometryType* Details what the type of geometry capturing the physical object
+- *geometry* The geometry (coordinates) of the physical object
+- *feature* OpenStreetMaps feature class associated with the object
+
+For some features, it is clear what type of physical object they are and a descriptor can be added. Update the *desc* column for these objects. For other features, there is a range of viable options and no such distinction may be made. For these, either leave the *desc* column blank or enter *remove* into the cells. The following figures go through, step-by-step, editting the *exampleEdinburgh noDetail* spreadsheet.
+
+
+![1.1 Setup of the *noDetail* spreadsheet.](files/vignette4images/Slide1.png){#id .class width=75% height=75%}  
+
+&nbsp;
+
+![1.2. First feature, *amenity*.](files/vignette4images/Slide2.png){#id .class width=75% height=75%}  
+
+&nbsp;
+
+
+![1.3. Using *descTerms.xlsx* to help in renaming the second feature, *barrier*.](files/vignette4images/Slide3.png){#id .class width=75% height=75%}  
+
+&nbsp;
+
+![1.4. Updating *desc* for the second feature, *barrier*.](files/vignette4images/Slide4.png){#id .class width=75% height=75%}  
+
+&nbsp;
+
+![5. Repeat this process for all features (tabs) and save.](files/vignette4images/Slide7.png){#id .class width=75% height=75%}
+
+
+## 2. Data filter outputs
+Step 5 of OSMtidy, data filtering, can output up to three different spreadsheets:
+
+- *5_dataFilter-unfiltered.xlsx*
+- *5_dataFilter-validate.xlsx*
+- *5_dataFilter-filtered.xlsx*
+
+
+### 2.1 Unfiltered
+The *unfiltered* spreadsheet is a collection of all the physical objects which were not filtered in step 5, data filtering, using the filters (*filters.xlsx*). The spreadsheet is laid out in the same way as the data wrangling *noDetail* output. The only difference is that there are additional columns providing detail on the physical object. The editting process is the same, change the *desc* column. The following figures go through, step-by-step, editting the *exampleEdinburgh unfiltered* spreadsheet.
+
+![2.1.1. The *unfiltered* spreadsheet for *exampleEdinburgh*.](files/vignette4images/Slide8.png){#id .class width=75% height=75%}  
+
+&nbsp;
+
+![2.1.2. Interpreting the spreadsheet information to update *desc*.](files/vignette4images/Slide9.png){#id .class width=100% height=100%}  
+
+&nbsp;
+
+![2.1.3. Using *filters.xlsx* to inform the *desc* column.](files/vignette4images/Slide10.png){#id .class width=75% height=75%}  
+
+&nbsp;
+
+![2.1.4. Using an internet search to inform the *desc* column.](files/vignette4images/Slide11.png){#id .class width=75% height=75%}
+
+&nbsp;
+
+![2.1.5. Updating *desc* based on *filters.xlsx* and an internet search.](files/vignette4images/Slide12.png){#id .class width=75% height=75%}  
+
+
+### 2.2 Validate
+The *validate* spreadsheet is contains all the filtered outputs which were required to be validated - specified in the filters.xlsx column *validate*. The spreadsheet is laid out in the same way as the *unfiltered* output. Here, the only difference is that the *desc* column is filled in. The objective here is to confirm (validate) the *desc* input. In some instances, the entry may say *Keyword filter* - this means the filter used a keyword to identify objects. The *desc* must be change if these outputs are to be included in the final output from OSMtidy. As before, objects to be removed can be specified with *remove*. The following figures go through, step-by-step, editting the *exampleEdinburgh validate* spreadsheet.
+
+![2.2.1. The *validate* spreadsheet for *exampleEdinburgh*.](files/vignette4images/Slide13.png){#id .class width=75% height=75%}  
+
+&nbsp;
+
+![2.2.2. Updating *desc* for a *Keyword filter*.](files/vignette4images/Slide14.png){#id .class width=75% height=75%}
+
+&nbsp;
+
+![2.2.3. Validating by eye and checking *Keyword filter*.](files/vignette4images/Slide15.png){#id .class width=100% height=100%}  
+
+&nbsp;
+
+![2.2.4. *Keyword filter* updated, informed by *filters.xlsx*.](files/vignette4images/Slide16.png){#id .class width=100% height=100%} 
+
+### 2.3 Filtered
+The *filtered* spreadsheet functions differently to the previous three. These are the objects which have been successfully filtered and did not require validation. The spreadsheet contains only one tab and three columns:
+
+- *osm_id* Unique OpenStreetMaps identifier
+- *desc* The descriptive column, populated with information from *filters.xlsx*
+- *geometry* The geometry (coordinates) of the physical object
+
+Once an object has been succesfully filtered, the additional OpenStreetMap identifying information is removed as it is no longer needed. However, the *desc* column in this spreadsheet may still be updated if desired.
+
+
+## 3. Read data in using dataTidy()
+Vignette 2 introduced the function `dataTidy()` - it gathers all the data outputs together to form a single summary output. It can be used without changing any of the spreadsheets, changing them all, or any combination. 
+
+- When using objects from R, use the object name
+- When importing spreadsheets, use the file directory in quotation marks, including the file extension
+
+```{r, echo = FALSE, eval = TRUE}
+dlFilter <- list()
+dlFilter$filtered <- readRDS("vignettes/files/exampleEdinburgh/exampleEdinburgh_5_dataFilter-filtered.RDS")
+source("functions/functions.R")
+```
+```{r}
+inputList <- list(dlFilter$filtered,
+                  "vignettes/files/exampleEdinburgh/exampleEdinburgh_4_dataWrangle-noDetail-editted.xlsx",
+                  "vignettes/files/exampleEdinburgh/exampleEdinburgh_5_dataFilter-unfiltered-editted.xlsx",
+                  "vignettes/files/exampleEdinburgh/exampleEdinburgh_5_dataFilter-validate-editted.xlsx")
+
+dlTidy <- dataTidy(inputList)
+dlTidy %>% dataSummary
+```
+
+As with each output from OSMtidy, this final output can be exported using the function `dataExport()`. 
+
+```{r}
+dlTidy %>% names
+
+dlTidy %>% dataExport
+```
