@@ -11,8 +11,7 @@ makeValid <- function(dg) {
       
       error = function(e) {
         
-        output <- readRDS(file)
-        output <- output %>% rowwise %>% mutate(valid = st_is_valid(geometry))
+        output <- dg %>% rowwise %>% mutate(valid = st_is_valid(geometry))
         output <- 
           list(output %>% 
                  filter(valid == FALSE) %>% 
