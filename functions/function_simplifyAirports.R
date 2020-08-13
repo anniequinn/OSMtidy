@@ -1,12 +1,13 @@
 simplifyAirports <- function(dg, 
-                             descSearch = "airport",
                              threshold_distanceBuildings = 1000, 
-                             threshold_major = 0.5, 
                              threshold_distanceInfrastructure = 2500,
+                             threshold_outline = 0.5, 
+                             threshold_area = 20000,
                              rbind = TRUE) {
   
   source("functions/functions_internal_postProcessing.R", local = TRUE)
   
+  descSearch <- "airport"
   dt <- dg %>% filter(str_detect(str_to_lower(desc), descSearch))
   
   output1 <- 
@@ -15,7 +16,7 @@ simplifyAirports <- function(dg,
   
   output2 <- 
     output1[[2]] %>% 
-    function_airportBoundaries(threshold = threshold_major)
+    function_airportBoundaries(threshold = threshold_outline)
   
   output3 <- 
     function_groupAirportInfrastructure(airports = output1, 
@@ -24,7 +25,7 @@ simplifyAirports <- function(dg,
   
   output <- 
     output3 %>% 
-    function_thresholdArea %>% 
+    function_thresholdArea(thresholdArea = threshold_area) %>% 
     mutate(type = st_geometry_type(geometry)) %>%
     select(desc, type, geometry)
   

@@ -1,6 +1,6 @@
 # -------------------------------------------------------------------------
-# OSMtidy V0.0.4.R
-# Annie Visser-Quinn, a.visser-quinn@hw.ac.uk
+# OSMtidy V0.0.41.R
+# Dr Annie Visser-Quinn, a.visser-quinn@hw.ac.uk
 #
 # Created: 2020-07-13
 # -------------------------------------------------------------------------
@@ -24,11 +24,13 @@ library(readxl)
 library(openxlsx)
 library(xlsx)
 
-# Read in the functions that make up OSMtidy V0.0.4
+# Read in the functions that make up OSMtidy V0.0.41
 source("functions/functions.R")
 
 
 # -------------------------------------------------------------------------
+
+
 # Prepare exampleEdinburgh shapefile
 # See Vignette 1 for details
 

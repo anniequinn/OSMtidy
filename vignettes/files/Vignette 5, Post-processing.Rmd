@@ -1,0 +1,267 @@
+---
+title: "OSMtidy - Vignette 5, Post-processing"
+author: "Dr Annie Visser-Quinn, a.visser-quinn@hw.ac.uk"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{OSMtidy - Vignette 5, Post-processing}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+knitr::opts_knit$set(
+  root.dir = normalizePath('../')
+  )
+
+library(tidyverse)
+library(sf)
+```
+```{r, include = FALSE}
+source("functions/functions.R")
+```
+
+
+## 1. Introduction
+This final vignette introduces OSMtidy's (optional) post-processing functions:
+
+- `makeValid()` attempts to make all geometries valid as well as recasting multigeometries to their component parts
+- A family of functions for simplifying geometries related to golf, rail and airports
+- `exportOSMtidy()` exports the post-processed data as a spreadsheet, an RDS file or a series of shapefiles
+
+This vignette will walk through these functions for two cities: Manchester and Edinburgh. These inputs are available in the folder *vignettes/files/postProcessing*.
+
+
+## 2. Example one - Manchester
+```{r}
+file <- list.files("vignettes/files/postProcessing", pattern = "Manchester", full.names = TRUE)
+file
+
+# Read RDS files into R using the base R function readRDS()
+dm <- readRDS(file)
+dm
+```
+
+### 2.1 makeValid()
+
+The function `makeValid()` attempts to validate the output geometries and resolve any spatial errors when using the geodata. The function consists of two parts. First, the function attempts to validate the geometries using the `st_make_valid()` function from the R package `sf`. This first part return a list split by geometry type. The second part looks at each type of geometry, attempts to recast it as a simpler geometry, and attempts to make this final output valid.
+
+**Note** If the function finds multiple errors, it will attempt to run a longer (and hence slower) code.
+
+```{r}
+dm %>% nrow()
+
+dm <- dm %>% makeValid
+dm
+
+dm %>% nrow()
+```
+
+### 2.2 Simplify
+Three functions have been developed to further simplify golf, rail and airport objects. These should be applied *after* the application of `makeValid()`. Each function is optional - you may use one, none, or any combination of the three. 
+
+#### simplifyGolf()
+The default filters in *filters.xlsx* result in an output such as that shown in the figure below. The sand traps / bunkers are shown as well as the outline of the golf course in its entirety. Buildings might also be outlined. Filters for physical objects relating to golf are challenging: driving ranges and other key buildings tend to be removed. The purpose of the `simplifyGolf()` function is to identify which objects belong to the same golf course, and then reduce them to a single polygon. 
+
+You can code variations for other object types by following the same structure and using the internal function `simplifyIntersects()`.
+
+```{r, include = FALSE}
+example_golfBefore <- 
+  dm %>% 
+  filter(str_detect(desc, "(golf)")) %>% 
+  mutate(x = st_coordinates(st_centroid(geometry))[,1],
+         y = st_coordinates(st_centroid(geometry))[,2]) %>% 
+  arrange(x,y) %>% 
+  slice(1:150) %>% 
+  filter(x < -2.265 & y > 53.42) %>%
+  ggplot() + geom_sf(alpha = 0.5)
+
+example_golfAfter <- 
+  dm %>% 
+  simplifyGolf(rbind = FALSE) %>%
+    mutate(x = st_coordinates(st_centroid(geometry))[,1],
+         y = st_coordinates(st_centroid(geometry))[,2]) %>% 
+  arrange(x,y) %>% 
+  slice(1:150) %>% 
+  filter(x < -2.265 & y > 53.42) %>%
+  ggplot() + geom_sf(alpha = 0.5)
+  ggplot() + geom_sf(alpha = 0.5)
+```
+```{r, fig.width = 14, fig.height = 10}
+example_golfBefore
+```
+
+The function accepts the following arguments:
+
+- *dg* The valid geodata as a spatial feature
+- *descSearch = "(golf)"* The search term to identify the related objects
+- *descNew = "Sports and games; Golf"* A new descriptor to assign to the objects once simplified
+- *maxIterations = 100* The function is applied iteratively and stops once all objects have been simplified or *maxIterations* is reached
+- *rbind = TRUE* Should the simplified objects be provided as the output (FALSE) or bound to the filtered input (TRUE)
+
+```{r, fig.width = 14, fig.height = 10}
+golfBefore <- dm %>% filter(str_detect(desc, "(golf)"))
+golfAfter <- dm %>% simplifyGolf(rbind = FALSE)
+
+golfBefore
+
+golfAfter
+
+example_golfAfter
+```
+
+```{r}
+dm %>% nrow()
+dm <- dm %>% simplifyGolf(rbind = TRUE)
+dm %>% nrow()
+dm %>% tail
+```
+
+#### simplifyRail()
+This function focuses on rail stations. It eliminates point geometries which duplicate polygons and, through specification of an area threshold, determines which polygons are major or minor stations. The default values have been determined with reference to three cities: Edinburgh, Manchester and Bristol.
+
+You can code variations for other object types by following the same structure and using the internal function `simplifyPoints()`.
+
+The function accepts the following arguments:
+
+- *dg* The valid geodata as a spatial feature
+- *descSearch = "Rail station"* The search term to identify the related objects
+- *descNew = "Public transport; Rail station"* A new descriptor to assign to the objects once simplified; major and minor stations will be specified by a suffix
+- *threshold_distance = 1000* Distance, in metres, below which objects should be considered as a single rail station
+- *threshold_area = 1000* Area, in square metres, above which a rail station is classified as major
+- *maxIterations = 100* The function is applied iteratively and stops once all objects have been simplified or *maxIterations* is reached
+- *rbind = TRUE* Should the simplified objects be provided as the output (FALSE) or bound to the filtered input (TRUE)
+
+```{r}
+dm %>% nrow()
+dm <- dm %>% simplifyRail(rbind = TRUE)
+dm %>% nrow()
+dm %>% tail
+```
+
+
+#### simplifyAirports()
+
+The final function in the simplify family, `simplifyAirports()` is intended to compliment the two airport filters specified in *filters.xlsx*. The first identifies buildings & outlines whilst the second identified major infrastructure (runways, taxiways and aprons). The simplify function groups airport physical objects, based on distance thresholds, and through specification of an area threshold, determines whether they are major or minor. 
+
+```{r, include = FALSE}
+example_airportBefore <- 
+dm %>% 
+    filter(str_detect(desc, "Airport")) %>% 
+    ggplot(aes(colour = desc, fill = desc)) + 
+    geom_sf(data = . %>% filter(type == "POLYGON"), alpha = 0.5, ) +
+    geom_sf(data = . %>% filter(type != "POLYGON")) + 
+  theme(legend.position = "top", 
+        legend.title = element_blank(),
+        legend.direction = "vertical")
+  
+example_airportAfter <- 
+dm %>% 
+    simplifyAirports(rbind = FALSE) %>%
+    ggplot(aes(colour = desc, fill = desc)) + 
+    geom_sf(data = . %>% filter(type == "POLYGON"), alpha = 0.5, ) +
+    geom_sf(data = . %>% filter(type != "POLYGON")) + 
+  theme(legend.position = "top", 
+        legend.title = element_blank(),
+        legend.direction = "vertical")
+```
+```{r, fig.width = 14, fig.height = 10}
+example_airportBefore
+```
+
+The function accepts the following arguments:
+
+- *dg* The valid geodata as a spatial feature
+- *threshold_distanceBuildings = 1000* Relative proximity threshold for airport buildings. Represents the distance, in metres, below which objects should be considered as a single airport
+- *threshold_distanceInfrastructure = 2500* Proximity threshold for airport infrastructure (relative to the airport buildings). Represents the distance, in metres, below which objects should be considered as part of a given airport
+- *threshold_outline = 0.5* Ratio threshold for polygons to separate airport boundaries from buildings
+- *threshold_area = 1000* Area, in square metres, above which an airport is classified as major. If an airport boundary is determined, this value is used, otherwise the area is the sum of the areas of all buildings for a given airport
+- *rbind = TRUE* Should the simplified objects be provided as the output (FALSE) or bound to the filtered input (TRUE)
+
+```{r, fig.width = 14, fig.height = 10}
+airportBefore <- dm %>% filter(str_detect(desc, "Airport"))
+airportAfter <- dm %>% simplifyAirports(rbind = FALSE)
+
+airportBefore
+
+airportAfter
+
+example_airportAfter
+```
+
+
+```{r}
+dm %>% nrow()
+dm <- dm %>% simplifyAirports(rbind = TRUE)
+dm %>% nrow()
+dm %>% tail
+```
+
+### 2.3 exportOSMtidy()
+The exportOSMtidy() function can be used once makeValid() has been applied, or after the simplify family. As with the functions central to OSMtidy's workflow, the file name is a combination of the location name and time stamps with the final output being exported to the *outputs* folder. Three types of output may be exported:
+
+- ".RDS" For when the output is to be used within the R environment
+- ".csv" Outputs a two column spreadsheet for use in any software environment
+- ".shp" Three shapefiles are generated - each capturing a geometry type (point, line and polygon)
+
+```{r}
+dm %>% exportOSMtidy("Manchester_City", type = ".RDS")
+
+dm %>% exportOSMtidy("Manchester_City", type = ".csv")
+
+dm %>% exportOSMtidy("Manchester_City", type = ".shp")
+```
+
+## 3. Example two - Edinburgh
+The Edinburgh example primarily serves to highlight the value of the `simplifyAirports()` function. First the data must be validated. Note, the slower version of `makeValid()` is called (internally) to process the Edinburgh geodata.
+
+```{r}
+file <- list.files("vignettes/files/postProcessing", pattern = "Edinburgh", full.names = TRUE)
+file
+
+de <- readRDS(file)
+de %>% nrow()
+
+de <- de %>% makeValid
+de %>% nrow()
+```
+
+```{r}
+airportBefore <- de %>% filter(str_detect(desc, "Airport"))
+airportBefore
+
+airportAfter <- de %>% simplifyAirports(rbind = FALSE)
+airportAfter
+```
+
+```{r, fig.width = 14, fig.height = 10}
+example_airportBefore <- 
+de %>% 
+    filter(str_detect(desc, "Airport")) %>% 
+    ggplot(aes(colour = desc, fill = desc)) + 
+    geom_sf(data = . %>% filter(type == "POLYGON"), alpha = 0.5, ) +
+    geom_sf(data = . %>% filter(type != "POLYGON")) + 
+  theme(legend.position = "top", 
+        legend.title = element_blank(),
+        legend.direction = "vertical")
+example_airportBefore
+
+example_airportAfter <- 
+de %>% 
+    simplifyAirports(rbind = FALSE) %>%
+    ggplot(aes(colour = desc, fill = desc)) + 
+    geom_sf(data = . %>% filter(type == "POLYGON"), alpha = 0.5, ) +
+    geom_sf(data = . %>% filter(type != "POLYGON")) + 
+  theme(legend.position = "top", 
+        legend.title = element_blank(),
+        legend.direction = "vertical")
+example_airportAfter
+```
