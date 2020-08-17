@@ -2,3 +2,10 @@
 .Rhistory
 json.R
 City_Boundary.geojson
+Edinburgh_City_2_dataExtract_20200320-175123.RDS
+Edinburgh_City_4_dataWrangle_20200527-173229.RDS
+Edinburgh_City_5_dataFilter-filtered_20200527-220457.RDS
+~$check.xlsx
+check.csv
+check.xlsx
+check_edinburghAmbulanceStation.R

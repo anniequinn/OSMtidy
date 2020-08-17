@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 cookieCutter <- function(dataInput, dataShapefile) { 
   
   source("functions/functions_internal.R", local = TRUE)
@@ -45,6 +46,17 @@ cookieCutter <- function(dataInput, dataShapefile) {
   
   # Cut those objects which are not contained directly within the shapefile
   st3False <- pblapply(st3False, function(x) { 
+=======
+cookieCutter <- function(sf, sfToCut, quiet = TRUE) {
+  
+  internalFunction <- function(sf, sfToCut) { 
+    
+    sfToCut <- sfToCut %>% summarise
+    
+    index <- sf %>% st_intersects(sfToCut) %>% lengths > 0 # Impacted by hazard
+    
+    cutout <- sf[index,] %>% st_intersection(sfToCut) # Subset (cut)
+>>>>>>> Stashed changes
     
     suppressMessages(
       suppressWarnings( 
@@ -53,6 +65,7 @@ cookieCutter <- function(dataInput, dataShapefile) {
         
       )) 
     
+<<<<<<< Updated upstream
   })
   
   
@@ -66,6 +79,20 @@ cookieCutter <- function(dataInput, dataShapefile) {
   output <- c(st3False, st3True)
   output <- output %>% modify(. %>% select(-contains)) %>% unname 
   output <- output %>% mapedit:::combine_list_of_sf() %>% as_tibble %>% st_as_sf()
+=======
+  }
+  
+  if(quiet == FALSE) { output <- internalFunction(sf, sfToCut) }
+  if(quiet == TRUE) { output <- 
+    suppressWarnings( 
+      suppressMessages(
+        internalFunction(
+          sf, sfToCut
+        )
+      )
+    )
+  }
+>>>>>>> Stashed changes
   
   class(output) <- c(class(output), "OSMtidy_cutOut")
   return(output)
