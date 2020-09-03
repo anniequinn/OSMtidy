@@ -8,7 +8,7 @@ simplifyGolf <- function(dg,
   
   output <- 
     dg %>% 
-    filter(str_detect(desc, descSearch)) %>%
+    filter(str_detect(str_to_lower(desc), str_to_lower(descSearch))) %>%
     
     simplifyIntersects(desc = descNew, maxIterations = maxIterations) %>% 
     
@@ -18,7 +18,7 @@ simplifyGolf <- function(dg,
   if(rbind == TRUE) { 
     output <- 
       list(dg %>% 
-             filter(!str_detect(desc, descSearch)), 
+             filter(!str_detect(str_to_lower(desc), str_to_lower(descSearch))), 
            output) %>% 
       mapedit:::combine_list_of_sf()
   }
