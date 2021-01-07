@@ -1,9 +1,9 @@
-Package: OSMtidyPackage
+Package: OSMtidy
 Type: Package
 Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
+Version: 0.0.43
+Author: Dr Annie Visser-Quinn <a.visser-quinn@hw.ac.uk> and Dr Melissa Bedinger <m.bedinger@hw.ac.uk>
+Maintainer: Dr Annie Visser-Quinn <a.visser-quinn@hw.ac.uk>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: What license is it under?

@@ -22,7 +22,7 @@ makeValid <- function(dg) {
                  filter(valid == TRUE) %>%
                  st_as_sf %>%
                  st_make_valid()) %>%
-          OSMtidyPackage:::.bind_rows_sf() %>%
+          .bind_rows_sf() %>%
           st_as_sf() %>%
           st_make_valid() %>%
           mutate(type = st_geometry_type(geometry) %>% as.character) %>%
@@ -61,7 +61,7 @@ makeValid <- function(dg) {
                 error = function(e) NULL)
     })) %>%
     Filter(Negate(is.null), .) %>%
-    OSMtidyPackage:::.bind_rows_sf() %>%
+    .bind_rows_sf() %>%
     mutate(type = st_geometry_type(geometry))
 
   return(output)
@@ -104,7 +104,7 @@ simplifyIntersects <- function(input, desc, maxIterations = 100) {
 
 
   # OUTPUT
-  output <- output %>% OSMtidyPackage:::.bind_rows_sf() %>% select(desc, geometry)
+  output <- output %>% .bind_rows_sf() %>% select(desc, geometry)
   return(output)
 
 }
@@ -129,7 +129,7 @@ simplifyGolf <- function(dg,
       list(dg %>%
              filter(!str_detect(str_to_lower(desc), str_to_lower(descSearch))),
            output) %>%
-      OSMtidyPackage:::.bind_rows_sf()
+      .bind_rows_sf()
   }
 
   return(output)
@@ -162,7 +162,7 @@ simplifyRail <- function(dg,
       list(dg %>%
              filter(!str_detect(desc, descSearch)),
            output) %>%
-      OSMtidyPackage:::.bind_rows_sf()
+      .bind_rows_sf()
   }
 
   return(output)
@@ -222,7 +222,7 @@ simplifyPoints <-
 
 
     # OUTPUT
-    output <- output %>% OSMtidyPackage:::.bind_rows_sf() %>% select(desc, geometry)
+    output <- output %>% .bind_rows_sf() %>% select(desc, geometry)
     return(output)
 
   }
@@ -334,14 +334,14 @@ function_groupAirportInfrastructure <- function(airports, airportsTidy, threshol
 
       output <-
         list(airportsTidy[[x]], dt) %>%
-        OSMtidyPackage:::.bind_rows_sf() %>%
+        .bind_rows_sf() %>%
         mutate(airportGroup = airportCompare$airportGroup[[1]])
       return(output)
     })
 
   output <-
     dl %>%
-    OSMtidyPackage:::.bind_rows_sf() %>%
+    .bind_rows_sf() %>%
     select(desc, airportGroup, geometry)
   return(output)
 
@@ -381,7 +381,7 @@ simplifyAirports <- function(dg,
       list(dg %>%
              filter(!str_detect(desc, descSearch)),
            output) %>%
-      OSMtidyPackage:::.bind_rows_sf()
+      .bind_rows_sf()
   }
 
   return(output)
