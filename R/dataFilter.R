@@ -9,7 +9,7 @@ dataFilter <- function(dataWrangle, filters, rows = NULL) {
 
 
   # FILTERS -----------------------------------------------------------------
-  filter <- read_xlsx(filters)
+  if(is.vector(filters)) { filter <- read_xlsx(filters) } else { filter <- filters }
   if(!is.null(rows)) { filter <- filter %>% slice(rows) }
   filter <- filter %>% filter_all(any_vars(!is.na(.)))
   filtersBySearchTerm <- filter
