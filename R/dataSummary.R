@@ -22,7 +22,7 @@ dataSummary <- function(data) {
       data %>%
       ggplot() +
       geom_sf(fill = "lightgrey", colour = "darkgrey") +
-      theme_minimal()
+      theme_void()
 
     output <-
       list(class = class(data),
