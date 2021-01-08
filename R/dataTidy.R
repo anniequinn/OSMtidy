@@ -36,7 +36,7 @@ dataTidy <- function(dataList) {
                modify(. %>% st_as_sf()) %>%
                .bind_rows_sf() %>%
                as_tibble() %>%
-               .rmCols
+               .rmCols()
            }, error = function(e) NULL),
 
          removeKeywordFilters =
@@ -45,7 +45,7 @@ dataTidy <- function(dataList) {
                modify(. %>% st_as_sf()) %>%
                .bind_rows_sf() %>%
                as_tibble() %>%
-               .rmCols
+               .rmCols()
            }, error = function(e) NULL),
 
          remove =
@@ -54,7 +54,7 @@ dataTidy <- function(dataList) {
                modify(. %>% st_as_sf()) %>%
                .bind_rows_sf() %>%
                as_tibble() %>%
-               .rmCols
+               .rmCols()
            }, error = function(e) NULL),
 
          filtered =
@@ -63,10 +63,9 @@ dataTidy <- function(dataList) {
                modify(. %>% st_as_sf()) %>%
                .bind_rows_sf() %>%
                as_tibble() %>%
-               .rmCols
+               .rmCols()
            }, error = function(e) NULL)
     ) %>%
-    .rmEmptyList() %>%
     .rmNullList()
 
   class(output) <- c(class(output), "OSMtidy_dataTidy")
