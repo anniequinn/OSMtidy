@@ -1,8 +1,7 @@
 filterOverview <- function(filters) {
 
-  require(readxl)
+  if(is.vector(filters)) { require(readxl); dt <- read_xlsx(filters) %>% as_tibble() } else { dt <- filters }
 
-  dt <- read_xlsx(filters) %>% as_tibble()
   dt <-
     dt %>%
     mutate(type = ifelse(str_detect(descTerm, "remove|Remove"), "remove",
