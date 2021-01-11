@@ -1,0 +1,91 @@
+---
+title: "Vignette 3 - Filters"
+author: "Dr Annie Visser-Quinn (a.visser-quinn@hw.ac.uk)"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: yes
+    toc_float: yes
+    toc_depth: 3
+    theme: flatly
+    highlight: breezedark
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+vignette: |
+  %\VignetteIndexEntry{Vignette 3 - Filters} %\VignetteEngine{knitr::rmarkdown} %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+library(OSMtidy)
+
+knitr::opts_chunk$set(echo = TRUE, out.height = "75%", out.width = "75%")
+```
+
+```{r}
+data("dlWrangle")
+dataSummary(dlWrangle)
+```
+
+Use `uniqueDescriptors()` to get an overview of the types of descriptors associated with each feature.
+
+```{r, cache=TRUE}
+
+uniqueDescriptors <- function(dataWrangle, elements = NULL) {
+
+  if(is.null(elements)) { elements <- 1:length(dataWrangle$dataWrangled) }  
+  
+  subset <- dataWrangle$dataWrangled[elements]
+  
+  names <- sapply(subset, function(x) { x$feature[[1]] })
+
+lapply(subset, function(x) { 
+  x %>%
+  as_tibble %>% 
+  select(-contains("osm_id"), -contains("geometry"), -contains("feature")) %>% 
+  OSMtidy:::.rmCols() %>% 
+  as.matrix %>% 
+  as.vector %>% 
+  unique
+}) %>%
+  
+  setNames(names)
+
+}
+
+
+uniqueDescriptors(dlWrangle, c(1,2,4,5))
+
+```
+Create an initial set of filters using the filters template. Use `system.file("extdata", "", package = "OSMtidy")` to locate the template directory.
+
+
+```{r}
+data("myFilters1")
+myFilters1
+```
+
+
+```{r, cache=TRUE}
+dlFilter1 <- dataFilter(dlWrangle, myFilters1)
+getwd()
+dataExport(dlFilter1, "vignette3Filter1")
+```
+Check spreadsheet output...
+Update filters to be more specific...
+
+```{r, cache=TRUE}
+data("myFilters2")
+dlFilter2 <- dataFilter(dlWrangle, myFilters2)
+getwd()
+dataExport(dlFilter2, "vignette3Filter2")
+```
+
+
+```{r, cache=TRUE}
+data("myFilters3")
+dlFilter3 <- dataFilter(dlWrangle, myFilters3)
+getwd()
+myFilters3
+dataExport(dlFilter3, "vignette3Filter3")
+```
