@@ -85,7 +85,7 @@ This data is extracted by feature, and a vector of the names of features consist
 
 ```{r}
 data("features")
-features <- features[1:5]; features # For this example we'll select a subset of 5 features
+features <- features[c(2,18,19,22,24)]; features # For this example we'll select a subset of 5 features
 
 osmdata::available_features # A vector of all 209 available features
 ```

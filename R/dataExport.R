@@ -78,7 +78,7 @@ dataExport <- function(data, name = NULL, directory = NULL) {
              feature = str_replace(feature, ":", "_")) %>%
       select(osm_id, desc, geometryType, geometry, everything()) %>%
       split(., .$feature) %>%
-      modify(. %>% .rmCols)
+      modify(. %>% .rmCols())
 
     .exportExcel(tibbleList = dataNoDetail, filename = fileNoDetail)
 
@@ -120,7 +120,7 @@ dataExport <- function(data, name = NULL, directory = NULL) {
                  select(osm_id, desc, geometry, everything())) %>%
         bind_rows() %>%
         split(., .$feature) %>%
-        modify(. %>% .rmCols)
+        modify(. %>% .rmCols())
 
       tryCatch(.exportExcel(tibbleList = dataUnfiltered, filename = fileInput), error = function(e) NULL)
 
@@ -159,11 +159,11 @@ dataExport <- function(data, name = NULL, directory = NULL) {
         if(sum(names(tmp) %in% "desc") == 0) { tmp <- tmp %>% mutate(desc = NA) }
         tmp %>%
           select(osm_id, filter, desc, geometry, everything()) %>%
-          .rmCols
+          .rmCols()
       }) %>%
         bind_rows %>%
         split(., .$desc) %>%
-        modify(. %>% .rmCols)
+        modify(. %>% .rmCols())
 
       vec <- sapply(1:length(dataValidate), function(x) { p1 = ((dataValidate[[x]] %>% nrow()) < 5); p1 == TRUE }) %>% which
 

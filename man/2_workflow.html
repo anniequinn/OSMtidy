@@ -11,7 +11,7 @@
 
 <meta name="author" content="Dr Annie Visser-Quinn (a.visser-quinn@hw.ac.uk)" />
 
-<meta name="date" content="2021-01-08" />
+<meta name="date" content="2021-01-11" />
 
 <title>Vignette 2 - OSMtidy workflow</title>
 
@@ -1652,7 +1652,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Vignette 2 - OSMtidy workflow</h1>
 <h4 class="author">Dr Annie Visser-Quinn (<a href="mailto:a.visser-quinn@hw.ac.uk" class="email">a.visser-quinn@hw.ac.uk</a>)</h4>
-<h4 class="date">2021-01-08</h4>
+<h4 class="date">2021-01-11</h4>
 
 </div>
 
@@ -1737,7 +1737,7 @@ div.tocify {
 <li>A timestamp of when the output was exported</li>
 </ul>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dataExport</span>(shp, <span class="st">&quot;exampleEdinburgh&quot;</span>)</span></code></pre></div>
-<pre><code>## File saved as: exampleEdinburgh_1_dataShapefile_20210108-115600.RDS</code></pre>
+<pre><code>## File saved as: exampleEdinburgh_1_dataShapefile_20210111-155053.RDS</code></pre>
 </div>
 </div>
 <div id="extract---using-dataextract" class="section level2">
@@ -1747,8 +1747,9 @@ div.tocify {
 <h3>2.1 Features</h3>
 <p>This data is extracted by feature, and a vector of the names of features consisting of physical objects can be generated via <code>data(&quot;features&quot;)</code>. A vector of all the vailable features in osmdata can be accessed via the function <code>osmdata::available_features</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;features&quot;</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>features <span class="ot">&lt;-</span> features[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]; features <span class="co"># For this example we&#39;ll select a subset of 5 features</span></span></code></pre></div>
-<pre><code>## [1] &quot;aeroway&quot; &quot;amenity&quot; &quot;barrier&quot; &quot;basin&quot;   &quot;bridge&quot;</code></pre>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>features <span class="ot">&lt;-</span> features[<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">18</span>,<span class="dv">19</span>,<span class="dv">22</span>,<span class="dv">24</span>)]; features <span class="co"># For this example we&#39;ll select a subset of 5 features</span></span></code></pre></div>
+<pre><code>## [1] &quot;amenity&quot;               &quot;healthcare&quot;            &quot;healthcare:speciality&quot;
+## [4] &quot;industrial&quot;            &quot;leisure&quot;</code></pre>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>osmdata<span class="sc">::</span>available_features <span class="co"># A vector of all 209 available features</span></span></code></pre></div>
 <pre><code>## function () 
 ## {
@@ -1763,7 +1764,7 @@ div.tocify {
 ##         message(&quot;No internet connection&quot;)
 ##     }
 ## }
-## &lt;bytecode: 0x0000000022b4fdc0&gt;
+## &lt;bytecode: 0x0000000022b71ab8&gt;
 ## &lt;environment: namespace:osmdata&gt;</code></pre>
 </div>
 <div id="dataextract" class="section level3">
@@ -2124,11 +2125,28 @@ div.tocify {
 ## [1] &quot;list&quot;             &quot;OSMtidy_dataTidy&quot;
 ## 
 ## $summary
-## # A tibble: 2 x 3
+## # A tibble: 3 x 3
 ##   data       total percent
 ##   &lt;chr&gt;      &lt;int&gt;   &lt;dbl&gt;
-## 1 unfiltered 12468   98.8 
-## 2 remove       145    1.15
+## 1 unfiltered 12468   76.6 
+## 2 remove       145    0.89
+## 3 filtered    3672   22.6 
+## 
+## $summaryFiltered
+## # A tibble: 73 x 2
+##    desc                                 total
+##    &lt;chr&gt;                                &lt;int&gt;
+##  1 Amenity; ATM                            14
+##  2 Amenity; Bicycle parking                55
+##  3 Amenity; Bike rental point               6
+##  4 Amenity; Car wash                        2
+##  5 Amenity; Electric car charging point     2
+##  6 Amenity; Flood defence                   2
+##  7 Amenity; Fountain (decorative)           1
+##  8 Amenity; Fuel station                    1
+##  9 Amenity; Grit bin                        2
+## 10 Amenity; Outdoor seating                22
+## # ... with 63 more rows
 ## 
 ## $unfiltered
 ## # A tibble: 3 x 2
@@ -2140,8 +2158,10 @@ div.tocify {
 <div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dataExport</span>(dlTidy, <span class="st">&quot;exampleEdinburgh&quot;</span>)</span></code></pre></div>
 <pre><code>## Files saved as:</code></pre>
 <pre><code>## 
-##  exampleEdinburgh_6_dataTidy-unfiltered_20210108-115602.RDS
-##  exampleEdinburgh_6_dataTidy-remove_20210108-115602.RDS</code></pre>
+##  exampleEdinburgh_6_dataTidy-unfiltered_20210111-155054.RDS
+##  exampleEdinburgh_6_dataTidy-remove_20210111-155055.RDS
+##  exampleEdinburgh_6_dataTidy-filtered_20210111-155055.RDS
+##  exampleEdinburgh_6_dataTidy-filtered_20210111-155055.csv</code></pre>
 </div>
 
 

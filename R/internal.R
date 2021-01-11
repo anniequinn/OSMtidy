@@ -117,7 +117,7 @@
 
   require(openxlsx)
 
-  wb <- createWorkbook()
+  wb <- openxlsx::createWorkbook()
 
   input <- tibbleList
 
@@ -129,11 +129,11 @@
 
   Map(function(data, nameofsheet){
 
-    addWorksheet(wb, nameofsheet)
-    writeDataTable(wb, nameofsheet, data, rowNames = FALSE)
+    openxlsx::addWorksheet(wb, nameofsheet)
+    openxlsx::writeDataTable(wb, nameofsheet, data, rowNames = FALSE)
 
   }, input, sheetnames)
 
-  saveWorkbook(wb, file = filename)
+  openxlsx::saveWorkbook(wb, file = filename)
 
 }

@@ -59,8 +59,8 @@ dataFilter <- function(dataWrangle, filters, rows = NULL) {
         cols = colNames[-which(colNames == "geometry")]
 
         output <-
-          DT[DT[, Reduce(`|`, lapply(.SD, function(x) { str_detect(x, searchTerm) })), .SDcols = cols]] %>%
-          .rmCols %>%
+          DT[DT[, Reduce(`|`, lapply(.SD, function(x) { str_detect(str_to_lower(x), searchTerm) })), .SDcols = cols]] %>%
+          .rmCols() %>%
           as_tibble() %>%
           mutate(desc = descTerm)
         output
@@ -96,8 +96,8 @@ dataFilter <- function(dataWrangle, filters, rows = NULL) {
 
     } # END I LOOP
 
-    validateList = validateList %>% .rmNullList %>% .rmEmptyList
-    outputList = outputList %>% .rmNullList %>% .rmEmptyList %>% modify(. %>% st_as_sf)
+    validateList = validateList %>% .rmNullList() %>% .rmEmptyList()
+    outputList = outputList %>% .rmNullList() %>% .rmEmptyList() %>% modify(. %>% st_as_sf)
     if(length(outputList) > 0) { outputList <- outputList %>% .bind_rows_sf() }
 
     INPUT[[j]] = input
@@ -126,13 +126,13 @@ dataFilter <- function(dataWrangle, filters, rows = NULL) {
       .rmNullList() %>%
       .rmEmptyList() %>%
       modify(. %>% st_as_sf) %>%
-      .bind_rows_sf %>%
+      .bind_rows_sf() %>%
       st_set_crs(4326) %>%
       as_tibble(),
     error = function(e) NULL)
 
   # Filtered data requiring validation
-  VALIDATE <- VALIDATE %>% flatten() %>% .rmNullList %>% .rmEmptyList() %>% modify(. %>% .rmCols %>% as_tibble)
+  VALIDATE <- VALIDATE %>% flatten() %>% .rmNullList() %>% .rmEmptyList() %>% modify(. %>% .rmCols() %>% as_tibble)
 
   outputFinal = list(unfiltered = INPUT, filtered = OUTPUT, validate = VALIDATE)
   class(outputFinal) <- c(class(outputFinal), "OSMtidy_dataFilter")
