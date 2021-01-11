@@ -96,8 +96,8 @@ dataFilter <- function(dataWrangle, filters, rows = NULL) {
 
     } # END I LOOP
 
-    validateList = validateList %>% .rmNullList() %>% .rmEmptyList()
-    outputList = outputList %>% .rmNullList() %>% .rmEmptyList() %>% modify(. %>% st_as_sf)
+    validateList = tryCatch(validateList %>% .rmNullList() %>% .rmEmptyList(), error = function(e) NULL)
+    outputList = tryCatch(outputList %>% .rmNullList() %>% .rmEmptyList() %>% modify(. %>% st_as_sf), error = function(e) NULL)
     if(length(outputList) > 0) { outputList <- outputList %>% .bind_rows_sf() }
 
     INPUT[[j]] = input
@@ -132,7 +132,7 @@ dataFilter <- function(dataWrangle, filters, rows = NULL) {
     error = function(e) NULL)
 
   # Filtered data requiring validation
-  VALIDATE <- VALIDATE %>% flatten() %>% .rmNullList() %>% .rmEmptyList() %>% modify(. %>% .rmCols() %>% as_tibble)
+  VALIDATE <- tryCatch(VALIDATE %>% flatten() %>% .rmNullList() %>% .rmEmptyList() %>% modify(. %>% .rmCols() %>% as_tibble), error = function(e) NULL)
 
   outputFinal = list(unfiltered = INPUT, filtered = OUTPUT, validate = VALIDATE)
   class(outputFinal) <- c(class(outputFinal), "OSMtidy_dataFilter")
