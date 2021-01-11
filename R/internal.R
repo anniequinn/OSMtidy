@@ -27,9 +27,9 @@
 
 .rmNullList <- function(input) { input %>% Filter(Negate(is.null), .) }
 
-# .rmEmptyList <- function(input) { input %>% Filter(function(x) dim(x)[1] > 0, .) }
+.rmEmptyList <- function(input) { input %>% Filter(function(x) dim(x)[1] > 0, .) }
 
-.rmEmptyList <- function(input) { input[ sapply(input, function(x) { !is.null(dim(x)[1]) }) ] }
+.rmEmptyListNew <- function(input) { input[ sapply(input, function(x) { !is.null(dim(x)[1]) }) ] }
 
 
 
