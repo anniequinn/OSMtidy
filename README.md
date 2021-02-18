@@ -2,6 +2,8 @@
 
 <img align="left" src="images/OSMtidy.png" height = "10%" width = "10%"> 
 
+Install OSMtidy using the devtools package: `devtools::install_github("avisserquinn/OSMtidy")`
+
 ## Overview
 OSMtidy is a software code, created in R. With OSMtidy, large messy OpenStreetMaps data can be quickly tidied into a streamlined dataset with a simple naming convention. OSMtidy can be applied at any scale, from a small village to cities the size of London.
 
@@ -27,20 +29,18 @@ The simple and easy to follow workflow consists of six steps:
 <img src="images/OSMtidy-workflow.png" height = "50%" width = "50%">
 </p
 
-There are four vignettes designed to get you on your way:
+There are two vignettes designed to get you on your way:
 
-+ **Vignette 1** [Getting started](vignettes/Vignette%201%2C%20Getting%20started.html)
-+ **Vignette 2** [Walkthrough](vignettes/Vignette%202$2C$20Walkthrough.html)
-+ **Vignette 3** [Filters](vignettes/Vignette%203%2C%20Filters.html)
-+ **Vignette 4** [Editing outputs](vignettes/Vignette%204%2C%20Editting%20outputs.html)
++ **Vignette 1** [Getting started](https://avisserquinn.github.io/OSMtidy/man/1_gettingStarted.html)
++ **Vignette 2** [Workflow](https://avisserquinn.github.io/OSMtidy/man/2_workflow.html)
 
 
 ## Filters
 Filters are central to OSMtidy. A year of development – across six major UK cities[1]– has yielded 1232 filters capable of identifying 540 unique physical objects, 44 key word filters (for manual validation) and 83 object types for removal. There are three ways to use the filters:
 
-1. Use the predetermined filters in [filters.xlsx](filters.xlsx)
+1. Use the predetermined filters (see [Vignette 2](https://avisserquinn.github.io/OSMtidy/man/2_workflow.html) and the inst/extdata folder 
 2. Fine-tune the predetermined filters for your application
-3. Start from scratch with your own filters using [filtersTemplate.xlsx](filters.xlsx) and the guide in [Vignette 3](vignettes/Vignette%203%2C%20Filters.html)
+3. Start from scratch with your own filters using the filtersTemplate in the inst/extdata folder
 
 [1] *Edinburgh, Glasgow, Belfast, Manchester, Bristol and London*
 
@@ -59,10 +59,10 @@ The development of OSMtidy is funded by UKRI EPSRC as part of the *Water Resilie
 
 
 ## Contributions & citation
-**Author** Annie Visser-Quinn
+**Authors** Annie Visser-Quinn and Melissa Bedinger
 
-**Filters development** Annie Visser-Quinn and Melissa Bedinger
+**Filters development and validation** Annie Visser-Quinn, Melissa Bedinger and Kerri McClymont
 
-**Contact** If you have any questions about using or running the code, or wish to access pre-filtered outputs for UK city locations, please contact a.visser-quinn@hw.ac.uk. 
+**Contact** If you have any questions about using or running the code, or wish to access pre-filtered outputs for UK city locations, please contact m.bedinger@hw.ac.uk. 
 
 **Please cite** Annie Visser-Quinn and Melissa Bedinger. (2020) OSMtidy V0.0.4, Edinburgh, Scotland. doi:10.5281/zenodo.3941990 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3941990.svg)](https://doi.org/10.5281/zenodo.3941990)
