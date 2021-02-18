@@ -35,12 +35,15 @@ There are two vignettes designed to get you on your way:
 + **Vignette 2** [Workflow](https://avisserquinn.github.io/OSMtidy/man/2_workflow.html)
 
 
+*Note: Additional post-processing functions not described.*
+
+
 ## Filters
 Filters are central to OSMtidy. A year of development – across six major UK cities[1]– has yielded 1232 filters capable of identifying 540 unique physical objects, 44 key word filters (for manual validation) and 83 object types for removal. There are three ways to use the filters:
 
-1. Use the predetermined filters (see [Vignette 2](https://avisserquinn.github.io/OSMtidy/man/2_workflow.html) and the inst/extdata folder 
+1. Use the predetermined filters (see [Vignette 2](https://avisserquinn.github.io/OSMtidy/man/2_workflow.html) and the inst/extdata folder)
 2. Fine-tune the predetermined filters for your application
-3. Start from scratch with your own filters using the filtersTemplate in the inst/extdata folder
+3. Start from scratch with your own filters using the filtersTemplate (inst/extdata folder)
 
 [1] *Edinburgh, Glasgow, Belfast, Manchester, Bristol and London*
 
@@ -55,7 +58,7 @@ OSMtidy is being developed as part of the £1-million Water Resilient Cities pro
 
 
 ## Acknowledgements 
-The development of OSMtidy is funded by UKRI EPSRC as part of the *Water Resilient Cities project*, grant number EP/N030419/1, as well as an associated EPSRC Impact Acceleration Fund, *Urban system response and recovery: Development of an online tool to explore the impact of COVID-19*.
+The development of OSMtidy is funded by UKRI EPSRC as part of Professor Lindsay Beever's *Water Resilient Cities project*, grant number EP/N030419/1, as well as an associated EPSRC Impact Acceleration Fund, *Urban system response and recovery: Development of an online tool to explore the impact of COVID-19*.
 
 
 ## Contributions & citation
@@ -65,4 +68,4 @@ The development of OSMtidy is funded by UKRI EPSRC as part of the *Water Resilie
 
 **Contact** If you have any questions about using or running the code, or wish to access pre-filtered outputs for UK city locations, please contact m.bedinger@hw.ac.uk. 
 
-**Please cite** Annie Visser-Quinn and Melissa Bedinger. (2020) OSMtidy V0.0.4, Edinburgh, Scotland. doi:10.5281/zenodo.3941990 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3941990.svg)](https://doi.org/10.5281/zenodo.3941990)
+**Please cite** Visser-Quinn et al. (2021) OSMtidy V0.0.5, Edinburgh, Scotland. doi:PENDING [![DOI](https://zenodo.org/badge/DOI/PENDING.svg)](https://doi.org/PENDING)
