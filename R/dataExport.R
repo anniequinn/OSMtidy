@@ -141,8 +141,10 @@ dataExport <- function(data, name = NULL, directory = NULL) {
       fileOutput1 <- paste0(directory, "/", fileOutput1)
       fileOutput2 <- paste0(directory, "/", fileOutput2)
       }
+               
+    csv_output = data$filtered %>% mutate(geometry = st_as_text(geometry)) # Potentially very slow
 
-    tryCatch(data$filtered %>% write_csv(fileOutput1), error = function(e) NULL)
+    tryCatch(csv_output %>% write_csv(fileOutput1), error = function(e) NULL)
     tryCatch(data$filtered %>% saveRDS(fileOutput2), error = function(e) NULL)
 
 
