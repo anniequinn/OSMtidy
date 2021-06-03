@@ -1,6 +1,5 @@
 simplifyGolf <- function(dg,
-                         descSearch = "(golf)",
-                         descNew = "Sports and games; Golf",
+                         descSearch = "golf", ## removed descSearch parentheses and descNew argument
                          maxIterations = 100,
                          rbind = TRUE) {
 
@@ -10,7 +9,7 @@ simplifyGolf <- function(dg,
     dg %>%
     filter(str_detect(str_to_lower(desc), str_to_lower(descSearch))) %>%
 
-    simplifyIntersects(desc = descNew, maxIterations = maxIterations) %>%
+    simplifyIntersects(maxIterations = maxIterations) %>% ## removed descNew argument
 
     mutate(type = st_geometry_type(geometry)) %>%
     select(desc, type, geometry)
