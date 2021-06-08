@@ -1,4 +1,5 @@
-makeValid <- function(dg) {
+makeValid <- 
+  function(dg) {
 
   output <-
     tryCatch(
@@ -68,235 +69,269 @@ makeValid <- function(dg) {
 
 }
 
-simplifyIntersects <- function(input, descNew = NA, maxIterations = 100) {
-  
-  # ALTERNATE FOR NROW == 1
-  
-  if ((nrow(input) == 1) == TRUE) {
+simplifyIntersects <- 
+  function(input, descNew = NA, maxIterations = 100) {
     
-    print("In this data there is 1 or fewer point data entries for 'Airport; Aerodrome, terminal and gates' or 'Transport infrastructure; Airport apron, runways and taxiways' to simplify")
-    
-    if (any(str_detect(input$desc, "golf") == TRUE)) {
-      descN <- "Sports and games; Golf"
-    }
-    else if (any(str_detect(input$desc, "Major") == TRUE)) {
-      descN <- "Major airports (simplified)"
-    }
-    else if (any(str_detect(input$desc, "Minor") == TRUE)) {
-      descN <- "Minor airports (simplified)"
-    }
-    else if (any(str_detect(input$desc, "Airport") == TRUE)) {
-      descN <- "Airports (to validate)"
-    }
-    else {
-      print("No preset descNew has been found for this object type. Specify descNew argument.")
-      descN <- descNew
-    }
-    
-    output <- input %>% mutate(desc = descN)
-    
-  }
-  
-  
-  # SETUP
-  iI <- input %>% st_transform(crs = 27700) %>% st_intersects
-  iL_n <- lengths(iI)
-  iI <- iI[order(iL_n, decreasing = TRUE)]
-  output <- list()
-  input2 <- input %>% st_as_sf %>% st_make_valid()
-  
-  
-  # LOOP
-  for (i in 1:maxIterations) { 
-    
-    ## AUTOMATED DESCNEW FOR GOLF, AIRPORTS
-    output[[i]] <- input %>% slice(iI[[1]]) 
-    
-    if (any(str_detect(output[[i]]$desc, "golf") == TRUE)) {
-      descN <- "Sports and games; Golf"
-    }
-    else if (any(str_detect(output[[i]]$desc, "Major") == TRUE)) {
-      descN <- "Major airports (simplified)"
-    }
-    else if (any(str_detect(output[[i]]$desc, "Minor") == TRUE)) {
-      descN <- "Minor airports (simplified)"
-    }
-    else if (any(str_detect(output[[i]]$desc, "Airport") == TRUE)) {
-      descN <- "Airports (to validate)"
-    }
-    else {
-      print("No preset descNew has been found for this object type. Specify descNew argument.")
-      descN <- descNew
-    }
-    
-    output[[i]] <-
-      input %>%
-      slice(iI[[1]]) %>%
-      summarise() %>%
-      mutate(desc = descN) ##
-    
-    # Indices to remove
-    remove <-
-      which(
-        sapply(1:length(iI), function(x) {
-          iI[[x]] %in% iI[[1]] %>% sum
-        }) > 0
-      )
-    
-    # Update input & index
-    input2 <- input2 %>% slice(-iI[[1]])
-    iI <- iI[-remove]
-    if(length(iI) == 0) break
-    
-  }
-  
-  
-  # OUTPUT
-  output <- output %>% .bind_rows_sf %>% select(desc, geometry)
-  return(output)
-  
-}
-
-simplifyGolf <- function(dg,
-                         descSearch = "golf", ## removed descSearch parentheses and descNew argument
-                         maxIterations = 100,
-                         rbind = TRUE) {
-  
-  source("functions/functions_internal_simplifyIntersects.R", local = TRUE)
-  
-  output <-
-    dg %>%
-    filter(str_detect(str_to_lower(desc), str_to_lower(descSearch))) %>%
-    
-    simplifyIntersects(maxIterations = maxIterations) %>% ## removed descNew argument
-    
-    mutate(type = st_geometry_type(geometry)) %>%
-    select(desc, type, geometry)
-  
-  if(rbind == TRUE) {
-    output <-
-      list(dg %>%
-             filter(!str_detect(str_to_lower(desc), str_to_lower(descSearch))),
-           output) %>%
-      .bind_rows_sf
-  }
-  
-  return(output)
-  
-}
-
-simplifyRail <- function(dg,
-                         descSearch = "Rail station",
-                         descNew = "Public transport; Rail station",
-                         threshold_distance = 1000,
-                         threshold_area = 1000,
-                         maxIterations = 100,
-                         rbind = TRUE) {
-
-  output <-
-    dg %>%
-    filter(str_detect(desc, descSearch)) %>%
-
-    simplifyPoints(desc = descNew,
-                   distance = threshold_distance,
-                   maxIterations = maxIterations) %>%
-
-    function_thresholdRail(threshold = threshold_area) %>%
-
-    mutate(type = st_geometry_type(geometry)) %>%
-    select(desc, type, geometry)
-
-  if(rbind == TRUE) {
-    output <-
-      list(dg %>%
-             filter(!str_detect(desc, descSearch)),
-           output) %>%
-      .bind_rows_sf()
-  }
-
-  return(output)
-
-}
-
-simplifyPoints <- function(input, 
-                           descNew = NA, ## changed desc to descNew argument
-                           distance = 1000, 
-                           maxIterations = 100) {
-  
-  distance <- units::set_units(distance, "m")
-  
-  # SETUP
-  iI <- st_is_within_distance(input, input, units::set_units(distance, "m"))
-  iL_n <- lengths(iI)
-  iI <- iI[order(iL_n, decreasing = TRUE)]
-  output <- list()
-  input2 <- input %>% st_as_sf() %>% st_make_valid()
-  
-  # LOOP
-  for (i in 1:maxIterations) {
-    
-    check <- input %>% slice(iI[[1]])
-    
-    # AUTOMATED DESCNEW
-    if (any(str_detect(check$desc, "Exhibition centres; Stadiums and arenas") == TRUE)) {
-      descN <- "Exhibition centres; Stadiums and arenas"
-    } else if (any(str_detect(check$desc, "Exhibition centres; Conference centres") == TRUE)) {
-      descN <- "Exhibition centres; Conference centres"
-    } else if (any(str_detect(check$desc, "Exhibition centres; Events venue") == TRUE)) {
-      descN <- "Exhibition centres; Events venue"
-    } else if (any(str_detect(check$desc, "Exhibition centres; Ice rink") == TRUE)) {
-      descN <- "Exhibition centres; Ice rink"
-    } else if (any(str_detect(check$desc, "Wastewater") == TRUE)) {
-      descN <- "Wastewater; Treatment works and facilities"
-    } else if (any(str_detect(check$desc, "Water") == TRUE)) {
-      descN <- "Water; Treatment works and facilities"
-    } else if (any(str_detect(check$desc, "Pumping station") == TRUE)) {
-      descN <- "Buildings; Pumping station"
-    } else {
-      print("No preset descNew has been found for this object type. Ensure you have specified a descNew argument.")
-      descN <- descNew
-    }
-    
-    if (nrow(check) > 1 & 
-        sum(str_detect(check$type, "POLYGON")) >= 1 & 
-        sum(str_detect(check$type, "POINT")) >= 1) 
-    {
-      output[[i]] <- 
-        input %>% 
-        slice(iI[[1]]) %>% 
-        filter(!str_detect(type, "POINT")) %>% 
-        summarise() %>% 
-        mutate(desc = descN) ## changed to descN
+    if ((nrow(input) == 1) == TRUE) {
+      print("In this data there is 1 or fewer point data entries for 'Airport; Aerodrome, terminal and gates' or 'Transport infrastructure; Airport apron, runways and taxiways' to simplify.")
       
-    } else {
-      
-      if (sum(str_detect(check$type, "POINT")) == nrow(check)) {
-        output[[i]] <- input %>% slice(iI[[1]]) %>% mutate(desc = descN) ## changed to descN
-      } else {
-        output[[i]] <- input %>% slice(iI[[1]]) %>% summarise() %>% mutate(desc = descN) ## changed to descN
+      if (any(str_detect(input$desc, "golf") == TRUE)) {
+        descN <- "Sports and games; Golf"
       }
+      
+      else if (any(str_detect(input$desc, "Major airport") == TRUE)) {
+        descN <- "Major airports (simplified)"
+      }
+      
+      else if (any(str_detect(input$desc, "Minor airport") == TRUE)) {
+        descN <- "Minor airports (simplified)"
+      }
+      
+      else if (any(str_detect(input$desc, "Major helipad") == TRUE)) {
+        descN <- "Major helipads (simplified)"
+      }
+      
+      else if (any(str_detect(input$desc, "Minor helipad") == TRUE)) {
+        descN <- "Minor helipads (simplified)"
+      }
+      
+      else if (any(str_detect(input$desc, "Airport|Helipad") == TRUE)) {
+        descN <- "Airports (to validate)"
+      }
+      
+      else {
+        print("No preset descNew has been found for this object type. Specify descNew argument.")
+        descN <- descNew
+      }
+      
+      output <- input %>% mutate(desc = descN)
+      
     }
     
-    # Indices to remove
-    remove <- which(sapply(1:length(iI), function(x) { iI[[x]] %in% iI[[1]] %>% sum }) > 0)
+    iI <- input %>% st_transform(crs = 27700) %>% st_intersects
     
-    # Update input & index
-    input2 <- input2 %>% slice(-iI[[1]])
-    iI <- iI[-remove]
-    if (length(iI) == 0) 
-      break
+    iL_n <- lengths(iI)
+    
+    iI <- iI[order(iL_n, decreasing = TRUE)]
+    
+    output <- list()
+    
+    input2 <- input %>% st_as_sf %>% st_make_valid()
+    
+    for (i in 1:maxIterations) {
+      
+      output[[i]] <- input %>% slice(iI[[1]]) 
+      
+      if (any(str_detect(output[[i]]$desc, "golf") == TRUE)) {
+        descN <- "Sports and games; Golf"
+      }
+      
+      else if (any(str_detect(output[[i]]$desc, "Major airport") == TRUE)) {
+        descN <- "Major airports (simplified)"
+      }
+      
+      else if (any(str_detect(output[[i]]$desc, "Minor airport") == TRUE)) {
+        descN <- "Minor airports (simplified)"
+      }
+      
+      else if (any(str_detect(output[[i]]$desc, "Major helipad") == TRUE)) {
+        descN <- "Major helipads (simplified)"
+      }
+      
+      else if (any(str_detect(output[[i]]$desc, "Minor helipad") == TRUE)) {
+        descN <- "Minor helipads (simplified)"
+      }
+      
+      else if (any(str_detect(output[[i]]$desc, "Airport|Helipad") == TRUE)) {
+        descN <- "Airports (to validate)"
+      }
+      
+      else {
+        print("No preset descNew has been found for this object type. Specify descNew argument.")
+        descN <- descNew
+      }
+      
+      output[[i]] <- 
+        output[[i]] %>% 
+        summarise() %>% 
+        mutate(desc = descN)
+      
+      remove <- 
+        which(sapply(1:length(iI), function(x) {
+          iI[[x]] %in% iI[[1]] %>% sum
+        }
+        ) > 0)
+      
+      input2 <- input2 %>% slice(-iI[[1]])
+      
+      iI <- iI[-remove]
+      
+      if (length(iI) == 0) 
+        break
+      
+    }
+    
+    output <- output %>% .bind_rows_sf() %>% select(desc, geometry)
+    
+    return(output)
     
   }
-  
-  # OUTPUT
-  output <- 
-    output %>% 
-    .bind_rows_sf() %>% 
-    select(desc, geometry)
-  
-  return(output)
-  
-}
+
+simplifyGolf <-
+  function (dg, descSearch = "golf", maxIterations = 100, rbind = TRUE) {
+    
+    source("R/functions_internal_simplifyIntersects.R", local = TRUE)
+    
+    output <- 
+      dg %>% 
+      dplyr::filter(str_detect(str_to_lower(desc), str_to_lower(descSearch))) %>% 
+      simplifyIntersects(maxIterations = maxIterations) %>%
+      mutate(type = st_geometry_type(geometry)) %>% 
+      select(desc, type, geometry)
+    
+    if (rbind == TRUE) {
+      output <- 
+        list(
+          dg %>% 
+            dplyr::filter(!str_detect(str_to_lower(desc), str_to_lower(descSearch))), 
+          output) %>% 
+        .bind_rows_sf()
+    }
+    
+    return(output)
+    
+  }
+
+simplifyRail <- 
+  function(dg, descSearch = "Rail station", 
+           descNew = "Public transport; Rail station", 
+           threshold_distance = 1000, threshold_area = 1000,
+           maxIterations = 100, rbind = TRUE) {
+    
+    source("R/functions_internal_postProcessing.R", local = TRUE)
+    source("R/functions_internal_simplifyPoints.R", local = TRUE)
+    
+    output <-
+      dg %>%
+      filter(str_detect(desc, descSearch)) %>%
+      
+      simplifyPoints(desc = descNew,
+                     distance = threshold_distance,
+                     maxIterations = maxIterations) %>%
+      
+      function_thresholdRail(threshold = threshold_area) %>%
+      
+      mutate(type = st_geometry_type(geometry)) %>%
+      select(desc, type, geometry)
+    
+    if(rbind == TRUE) {
+      output <-
+        list(dg %>%
+               filter(!str_detect(desc, descSearch)),
+             output) %>%
+        .bind_rows_sf()
+    }
+    
+    return(output)
+    
+  }
+
+simplifyPoints <- 
+  function(input, descNew = NA, distance = 1000, maxIterations = 100) {
+    
+    distance <- units::set_units(distance, "m")
+    
+    iI <- st_is_within_distance(input, input, 
+                                units::set_units(distance, "m"))
+    iL_n <- lengths(iI)
+    
+    iI <- iI[order(iL_n, decreasing = TRUE)]
+    
+    output <- list()
+    
+    input2 <- input %>% st_as_sf() %>% st_make_valid()
+    
+    for (i in 1:maxIterations) {
+      
+      check <- input %>% slice(iI[[1]])
+      
+      if (any(str_detect(check$desc, 
+                         "Exhibition centres; Stadiums and arenas") == TRUE)) {
+        descN <- "Exhibition centres; Stadiums and arenas"
+      }
+      
+      else if (any(str_detect(check$desc, 
+                              "Exhibition centres; Conference centres") == TRUE)) {
+        descN <- "Exhibition centres; Conference centres"
+      }
+      
+      else if (any(str_detect(check$desc, 
+                              "Exhibition centres; Events venue") == TRUE)) {
+        descN <- "Exhibition centres; Events venue"
+      }
+      
+      else if (any(str_detect(check$desc, "Exhibition centres; Ice rink") == TRUE)) {
+        descN <- "Exhibition centres; Ice rink"
+      }
+      
+      else if (any(str_detect(check$desc, "Wastewater") == TRUE)) {
+        descN <- "Wastewater; Treatment works and facilities"
+      }
+      
+      else if (any(str_detect(check$desc, "Water") == TRUE)) {
+        descN <- "Water; Treatment works and facilities"
+      }
+      
+      else if (any(str_detect(check$desc, "Pumping station") == TRUE)) {
+        descN <- "Buildings; Pumping station"
+      }
+      
+      else {
+        print("No preset descNew has been found for this object type. Ensure you have specified a descNew argument.")
+        descN <- descNew
+      }
+      
+      if (nrow(check) > 1 & 
+          sum(str_detect(check$type, "POLYGON")) >= 1 & 
+          sum(str_detect(check$type, "POINT")) >= 1) {
+        output[[i]] <- 
+          input %>% slice(iI[[1]]) %>% dplyr::filter(!str_detect(type, "POINT")) %>% 
+          summarise() %>% mutate(desc = descN)
+      }
+      
+      else {
+        
+        if (sum(str_detect(check$type, "POINT")) == nrow(check)) {
+          output[[i]] <- 
+            input %>% slice(iI[[1]]) %>% mutate(desc = descN)
+        }
+        
+        else {
+          output[[i]] <- 
+            input %>% slice(iI[[1]]) %>% summarise() %>% mutate(desc = descN)
+        }
+      }
+      
+      remove <- 
+        which(sapply(1:length(iI), function(x) {
+          iI[[x]] %in% iI[[1]] %>% sum
+        }
+        ) > 0)
+      
+      input2 <- input2 %>% slice(-iI[[1]])
+      
+      iI <- iI[-remove]
+      
+      if (length(iI) == 0) 
+        break
+      
+    }
+    
+    output <- output %>% .bind_rows_sf() %>% select(desc, geometry)
+    
+    return(output)
+    
+  }
 
 function_thresholdRail <- function(input, threshold = 1000) {
 
@@ -309,123 +344,151 @@ function_thresholdRail <- function(input, threshold = 1000) {
 
 }
 
-function_groupAirports <- function(input, threshold = 1000) {
-  
-  # Remove all points and identify unique airports
-  
-  dl <- 
-    input %>% 
-    filter(type != "POINT") %>% 
-    split(., .$desc)
-  
-  if (is_empty(dl$`Airport; Aerodrome, terminal and gates`) == TRUE) { ## if empty list element stop further processing
+function_groupAirports <- 
+  function(input = dt, threshold = 1000) {
     
-    print("In this data there is 1 or fewer string or polygon data entries for 'Airport; Aerodrome, terminal and gates' to simplify.")
+    dl <- input %>% dplyr::filter(type != "POINT") %>% split(., .$desc)
     
-    return(dl)
-    
-  }
-  
-  else {
-    
-    groups <-
-      dl$`Airport; Aerodrome, terminal and gates` %>%
-      st_is_within_distance(dist = units::set_units(threshold, "m"))
-    
-    grouped <-
-      dl$`Airport; Aerodrome, terminal and gates` %>%
-      mutate(airportGroup = 
-               sapply(groups, function(x) x %>% paste0(collapse = "_")))
-    output <- 
-      list(dl = dl, grouped = grouped)
-    
-    return(output)
-    
-  }
-  
-}
-
-function_airportBoundaries <- function(input, threshold = 0.5) {
-  
-  if (is.null(input$grouped) == TRUE) { ## check if grouped list element exists, if not return the input unchanged
-    
-    if (nrow(input$`Transport infrastructure; Airport apron, runways and taxiways`) < 2) {
+    if (is_empty(dl$`Airport; Aerodrome, terminal and gates`) == TRUE & 
+        is_empty(dl$`Public transport; Helipad`) == TRUE) {
       
-      print("In this data there is 1 or fewer string or polygon data entries for `Transport infrastructure; Airport apron, runways and taxiways` to simplify.")
+      print("In this data there is 1 or fewer string or polygon data entries for 'Airport; Aerodrome, terminal and gates' or 'Public transport; Helipad' to be grouped.")
+      
+      return(dl)
+      
+    } else if (is_empty(dl$`Public transport; Helipad`) == TRUE) {
+      
+      groups <-
+        dl$`Airport; Aerodrome, terminal and gates` %>%
+        st_is_within_distance(dist = units::set_units(threshold, "m"))
+      
+      grouped <-
+        dl$`Airport; Aerodrome, terminal and gates` %>%
+        mutate(airportGroup = sapply(groups, function(x) x %>% paste0(collapse = "_")))
+      
+      output <- list(dl = dl, grouped = grouped)
+      
+      return(output)
+      
+    } else if (is_empty(dl$`Airport; Aerodrome, terminal and gates`) == TRUE) {
+      
+      groups <-
+        dl$`Public transport; Helipad` %>%
+        st_is_within_distance(dist = units::set_units(threshold, "m"))
+      
+      grouped <-
+        dl$`Public transport; Helipad` %>%
+        mutate(airportGroup = sapply(groups, function(x) x %>% paste0(collapse = "_")))
+      
+      output <- list(dl = dl, grouped = grouped)
+      
+      return(output)
+      
+    } else {
+      
+      groups <- 
+        dl$`Airport; Aerodrome, terminal and gates` %>% 
+        rbind(dl$`Public transport; Helipad`) %>% 
+        st_is_within_distance(dist = units::set_units(threshold, "m"))
+      
+      grouped <-
+        dl$`Airport; Aerodrome, terminal and gates` %>%
+        rbind(dl$`Public transport; Helipad`) %>%
+        mutate(airportGroup = sapply(groups, function(x) x %>% paste0(collapse = "_")))
+      
+      output <- list(dl = dl, grouped = grouped)
+      
+      return(output)
       
     }
     
-    return(input)
-    
   }
-  
-  # If the airport has more than one row of data
-  # Check that the largest area is an order of magnitude greater
-  # than the rest of the polygons
-  
-  else {
-    
-    dl <- 
-      input[[2]] %>% ## changed
-      mutate(area = st_area(geometry) %>% as.numeric())
-    
-    dl <- 
-      dl %>% 
-      split(., .$airportGroup) 
-    
-    check <- dl[(sapply(dl, nrow) > 1)]
-    
-    output <- 
-      lapply(check, function(x) {
-        x %>% 
-          filter(area > 0) %>% 
-          mutate(area2 = area/max(area)) %>% 
-          mutate(desc = ifelse(area2 >= threshold, 
-                               paste0(desc, " (Airport outline)"), paste0(desc, " (Building outline)"))) %>% 
-          select(desc, airportGroup, geometry)
-      }) %>% 
-      c(dl[(sapply(dl, nrow) == 1)] %>% 
-          modify(. %>% 
-                   select(desc, airportGroup, geometry))) 
-    
-    return(output)
-    
-  }
-  
-}
 
-function_thresholdArea <- function(input, thresholdArea = 20000) 
-{
+function_airportBoundaries <- 
+  function(input, threshold = 0.5) {
+    
+    if (is.null(input$grouped) == TRUE) {
+      
+      if (nrow(input$`Airport; Aerodrome, terminal and gates`) == 1) {
+        print("In this data there is only 1 string or polygon data entry for airports to simplify, in `Airport; Aerodrome, terminal and gates`.")
+      }
+      
+      if (nrow(input$`Public transport; Helipad`) == 1) {
+        print("In this data there is only 1 string or polygon data entry for airports to simplify, in `Public transport; Helipad`.")
+      }
+      
+      if (nrow(input$`Transport infrastructure; Airport apron, runways and taxiways`) == 1) {
+        print("In this data there is only 1 string or polygon data entry for airports to simplify, in `Transport infrastructure; Airport apron, runways and taxiways`.")
+      }
+      
+      return(input)
+      
+    }
+    
+    
+    else {
+      
+      dl <- 
+        input[[2]] %>%
+        mutate(area = st_area(geometry) %>% as.numeric())
+      
+      dl <- dl %>% split(., .$airportGroup) 
+      
+      check <- dl[(sapply(dl, nrow) > 1)]
+      
+      output <- 
+        lapply(check, function(x) {
+          x %>% 
+            dplyr::filter(area > 0) %>% 
+            mutate(area2 = area/max(area)) %>% 
+            mutate(desc = ifelse(area2 >= threshold, 
+                                 paste0(desc, " (Airport outline)"), 
+                                 paste0(desc, " (Building outline)"))) %>% 
+            select(desc, airportGroup, geometry)
+        }
+        ) %>% 
+        c(dl[(sapply(dl, nrow) == 1)] %>% 
+            modify(. %>% 
+                     select(desc, airportGroup, geometry))) 
+      
+      return(output)
+      
+    }
+    
+  }
+
+function_thresholdArea <- 
+  function(input, thresholdArea = 20000) {
   
-  if (nrow(input) < 2) { ## alternate for cases where there is not enough data to group
+  if (is.null(input$airportGroup) == TRUE) {
+    
+    descSearch <- "irport|elipad"
     
     output <- 
       input %>% 
-      filter(str_detect(desc, "irport")) %>%
+      dplyr::filter(str_detect(desc, descSearch)) %>%
       mutate(area = st_area(geometry)) %>% 
       as_tibble() %>%
-      mutate(prefix = ifelse(area > units::set_units(20000, "m^2"), 
-                             "Major", "Minor")) %>%
+      mutate(prefix = ifelse(area > units::set_units(20000, "m^2"), "Major", "Minor")) %>%
       mutate(desc = str_replace(desc, "Airport", paste0(prefix, " airport")),
+             desc = str_replace(desc, "Helipad", paste0(prefix, " helipad")),
              type = st_geometry_type(geometry)) %>%
       select(desc, type, geometry)
     
     return(output)
     
-  }
-  
-  else {
+  } else {
+    
+    descSearch <- "erodrome|elipad"
     
     key <- 
       input %>% 
-      filter(str_detect(desc, "Aerodrome, terminal and gates")) %>%
-      filter(desc != "Airport; Aerodrome, terminal and gates (Building outline)") %>%
+      dplyr::filter(str_detect(desc, descSearch)) %>%
+      dplyr::filter(!str_detect(desc, "Building outline")) %>%
       mutate(area = st_area(geometry)) %>% 
       as_tibble() %>%
-      group_by(airportGroup, 
-               .groups = "drop_last") %>%
-      summarise(area = sum(area) %>% 
-                  as.numeric) %>% 
+      group_by(airportGroup, .groups = "drop_last") %>%
+      summarise(area = sum(area) %>% as.numeric) %>% 
       ungroup %>%
       mutate(prefix = ifelse(area > thresholdArea, 
                              "Major", "Minor")) %>% 
@@ -435,8 +498,9 @@ function_thresholdArea <- function(input, thresholdArea = 20000)
       input %>% 
       left_join(key, by = "airportGroup") %>%
       mutate(desc = str_replace(desc, "Airport", paste0(prefix, " airport")),
-             type = st_geometry_type(geometry)) %>% ## shifted
-      select(desc, type, geometry) ## shifted
+             desc = str_replace(desc, "Helipad", paste0(prefix, " helipad")),
+             type = st_geometry_type(geometry)) %>%
+      select(desc, type, geometry)
     
     return(output)
     
@@ -444,127 +508,206 @@ function_thresholdArea <- function(input, thresholdArea = 20000)
   
 }
 
-function_groupAirportInfrastructure <- function(airports, airportsTidy, threshold = 2500) {
-  
-  # Identify runways, taxiways and aprons that are part of the airport
-  # i.e. linestring (predominantly)
-  
-  if (length(airports) == length(airportsTidy)) { ## if enough data to group, output 1 will have 2 elements and output 2 will have 1 element; otherwise skip function_groupAirportInfrastructure
+function_groupAirportInfrastructure <- 
+  function(input, airports, airportsTidy, threshold = 2500) {
     
-    print("In this data there is 1 or fewer string or polygon data entries for `Transport infrastructure; Airport apron, runways and taxiways` to simplify.")
+    check <- input %>% dplyr::filter(type != "POINT") %>% split(., .$desc)
     
-    output <- 
-      airportsTidy %>% 
-      .bind_rows_sf() %>% 
-      select(desc, geometry)
-    
-    return(output)
-    
-  }
-  
-  else {
-    
-    dl <- 
-      lapply(1:length(airportsTidy), function(x) {
-        airportCompare <- 
-          airportsTidy[[x]] %>% 
-          mutate(area = st_area(geometry)) %>%
-          filter(area == max(area))
-        
-        dt <- 
-          airports$dl$`Transport infrastructure; Airport apron, runways and taxiways` %>%
-          mutate(distance = st_distance(airportCompare, 
-                                        airports$dl$`Transport infrastructure; Airport apron, runways and taxiways`) %>% 
-                   unlist %>% 
-                   as.vector() %>% 
-                   as.numeric) %>% 
-          filter(distance < threshold) 
-        
-        output <- 
-          list(airportsTidy[[x]], dt) %>% 
-          .bind_rows_sf() %>% 
-          mutate(airportGroup = airportCompare$airportGroup[[1]])
-        
-        return(output)
-        
-      })
-    
-    output <- 
-      dl %>% 
-      .bind_rows_sf() %>% 
-      select(desc, airportGroup, geometry)
-    return(output) 
-    
-  }
-  
-}
-
-simplifyAirports <- function(dg,
-                             threshold_distanceBuildings = 1000,
-                             threshold_distanceInfrastructure = 2500,
-                             threshold_outline = 0.5,
-                             threshold_area = 20000,
-                             rbind = TRUE) {
-  
-  source("functions/functions_internal_postProcessing.R", local = TRUE)
-  
-  descSearch <- "irport" ## made non-capital sensitive to be reusable / avoid using str_to_lower across multiple functions
-  
-  dt <- dg %>% filter(str_detect(str_to_lower(desc), descSearch))
-  
-  if (nrow(dt) == 0) { ## conditional to stop simplifyAirports function applied to datasets with no airport items
-    
-    stop("There is no airport data; simplifyAirports is not needed.")
-    
-  }
-  
-  else {
-    
-    output1 <- dt %>% function_groupAirports(threshold = threshold_distanceBuildings) 
-    
-    output2 <- 
-      output1 %>% ## made more generic
-      function_airportBoundaries(threshold = threshold_outline) 
-    
-    output3 <- 
-      function_groupAirportInfrastructure(
-        airports = output1, airportsTidy = output2, 
-        threshold = threshold_distanceInfrastructure)
-    
-    output4 <- 
-      output3 %>% 
-      function_thresholdArea(thresholdArea = threshold_area)
-    
-    output_pt <-
-      dt %>% filter(type == "POINT") ## extract point data
-    
-    if ((nrow(output_pt) < 1) == FALSE) { ## if any point data exists, bind it for later application of simplifyIntersects
+    if (is.null(check$`Transport infrastructure; Airport apron, runways and taxiways`) == TRUE) { 
+      print("In this data there are no string or polygon data entries to simplify for `Transport infrastructure; Airport apron, runways and taxiways`.")
+      output <- airportsTidy %>% .bind_rows_sf() %>% select(desc, geometry)
+      return(output)
       
-      output4 <- output4 %>% rbind(output_pt)
+    } else if (length(airportsTidy) == 1) {
       
-    }
-    
-    output5 <- ## simplifyIntersects to remove extraneous point data
-      output4 %>%
-      st_as_sf() %>%
-      simplifyIntersects(maxIterations = 100) %>%
-      mutate(type = st_geometry_type(geometry))
-    
-    if (rbind == TRUE) {
+      airportCompare <- 
+        airportsTidy[[1]] %>% 
+        mutate(area = st_area(geometry)) %>%
+        dplyr::filter(area == max(area))
+      
+      dt <- 
+        airports$dl$`Transport infrastructure; Airport apron, runways and taxiways` %>%
+        mutate(distance = 
+                 st_distance(airportCompare, 
+                             airports$dl$`Transport infrastructure; Airport apron, runways and taxiways`) %>% 
+                 unlist %>% 
+                 as.vector() %>% 
+                 as.numeric) %>% 
+        dplyr::filter(distance < threshold) 
+      
+      dl <- 
+        list(airportsTidy[[1]], dt) %>% 
+        .bind_rows_sf() %>% 
+        mutate(airportGroup = airportCompare$airportGroup[[1]]) %>% 
+        select(desc, airportGroup, geometry)
+      
+      return(dl)
+      
+      
+    } else {
+      
+      dl <- 
+        lapply(1:length(airportsTidy), function(x) {
+          
+          airportCompare <- 
+            airportsTidy[[x]] %>% 
+            mutate(area = st_area(geometry)) %>%
+            dplyr::filter(area == max(area))
+          
+          dt <- 
+            airports$dl$`Transport infrastructure; Airport apron, runways and taxiways` %>%
+            mutate(distance = st_distance(airportCompare, 
+                                          airports$dl$`Transport infrastructure; Airport apron, runways and taxiways`) %>% 
+                     unlist %>% 
+                     as.vector() %>% 
+                     as.numeric) %>% 
+            dplyr::filter(distance < threshold) 
+          
+          output <- 
+            list(airportsTidy[[x]], dt) %>% 
+            .bind_rows_sf() %>% 
+            mutate(airportGroup = airportCompare$airportGroup[[1]])
+          
+          return(output)
+          
+        }
+        
+        )
       
       output <- 
-        list(dg %>% filter(!str_detect(desc, descSearch)), output5) %>% 
-        .bind_rows_sf()
+        dl %>% 
+        .bind_rows_sf() %>% 
+        select(desc, airportGroup, geometry)
       
+      return(output)
+      
+    }
+    
+  }
+
+simplifyAirports <- 
+  function(dg, threshold_distanceBuildings = 1000, 
+           threshold_distanceInfrastructure = 2500, threshold_outline = 0.5, 
+           threshold_area = 20000, rbind = TRUE) {
+    
+    source("R/functions_internal_postProcessing.R", local = TRUE)
+    
+    descSearch <- "irport|elipad"
+    
+    dt <- dg %>% dplyr::filter(str_detect(desc, descSearch))
+    
+    if (nrow(dt) == 0) {
+      stop("There is no airport data; simplifyAirports is not needed.") 
+    }
+    
+    else {
+      
+      output1 <- 
+        dt %>% 
+        function_groupAirports(threshold = threshold_distanceBuildings) 
+      
+      output2 <- 
+        output1 %>% 
+        function_airportBoundaries(threshold = threshold_outline) 
+      
+      output3 <- 
+        function_groupAirportInfrastructure(
+          input = dt,
+          airports = output1, 
+          airportsTidy = output2, 
+          threshold = threshold_distanceInfrastructure)
+      
+      output4 <- 
+        output3 %>% 
+        function_thresholdArea(thresholdArea = threshold_area)
+      
+      output_pt <-
+        dt %>% dplyr::filter(type == "POINT")
+      
+      if ((nrow(output_pt) < 1) == FALSE) {
+        output4 <- output4 %>% rbind(output_pt)
+      }
+      
+      output5 <-
+        output4 %>%
+        st_as_sf() %>%
+        simplifyIntersects(maxIterations = 100) %>%
+        mutate(type = st_geometry_type(geometry))
+      
+      if (rbind == TRUE) {
+        output <- 
+          list(dg %>% dplyr::filter(!str_detect(desc, descSearch)), output5) %>% 
+          .bind_rows_sf()
+      }
+      
+      return(output)
+      
+    }
+    
+  }
+
+simplifyTreatment <- 
+  function(dg,  distance = 1000, maxIterations = 100, rbind = TRUE) {
+    
+    source("R/functions_internal_simplifyPoints.R", local = TRUE)
+    
+    waterKey <- 
+      c("Buildings; Pumping station", 
+        "Wastewater; Sanitary dump", 
+        "Wastewater; Treatment works", 
+        "Wastewater; Treatment works and facilities", 
+        "Water", 
+        "Water; Storage tower", 
+        "Water; Treatment works and facilities")
+    
+    output <- 
+      dg %>% 
+      dplyr::filter(desc %in% waterKey) %>%
+      simplifyPoints(distance = distance, maxIterations = maxIterations) %>%
+      mutate(type = st_geometry_type(geometry)) %>% 
+      select(desc, type, geometry)
+    
+    if (rbind == TRUE) {
+      output <- 
+        list(
+          dg %>% 
+            dplyr::filter(!desc %in% waterKey), 
+          output) %>% 
+        .bind_rows_sf()
     }
     
     return(output)
     
   }
-  
-}
 
-exportOSMtidy <- function(dg, locationName, type = c(".RDS", ".csv", ".shp")) {
+simplifyVenues <- 
+  function(dg, descSearch = "Exhibition", distance = 1, 
+           maxIterations = 100, rbind = TRUE) {
+    
+    source("R/functions_internal_simplifyPoints.R", local = TRUE)
+    
+    output <- 
+      dg %>% 
+      dplyr::filter(str_detect(desc, descSearch)) %>%
+      simplifyPoints(distance = distance, maxIterations = maxIterations) %>%
+      mutate(type = st_geometry_type(geometry)) %>% 
+      select(desc, type, geometry)
+    
+    if (rbind == TRUE) {
+      output <- 
+        list(
+          dg %>% 
+            dplyr::filter(!str_detect(str_to_lower(desc), str_to_lower(descSearch))), 
+          output) %>% 
+        .bind_rows_sf()
+    }
+    
+    return(output)
+    
+  }
+
+exportOSMtidy <- 
+  function(dg, locationName, type = c(".RDS", ".csv", ".shp")) {
 
   prefix <- paste0(locationName, "_postProcessing")
 
