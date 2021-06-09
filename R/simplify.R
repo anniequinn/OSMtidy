@@ -180,8 +180,6 @@ simplifyIntersects <-
 simplifyGolf <-
   function (dg, descSearch = "golf", maxIterations = 100, rbind = TRUE) {
     
-    source("R/functions_internal_simplifyIntersects.R", local = TRUE)
-    
     output <- 
       dg %>% 
       dplyr::filter(str_detect(str_to_lower(desc), str_to_lower(descSearch))) %>% 
@@ -207,9 +205,6 @@ simplifyRail <-
            descNew = "Public transport; Rail station", 
            threshold_distance = 1000, threshold_area = 1000,
            maxIterations = 100, rbind = TRUE) {
-    
-    source("R/functions_internal_postProcessing.R", local = TRUE)
-    source("R/functions_internal_simplifyPoints.R", local = TRUE)
     
     output <-
       dg %>%
@@ -590,8 +585,6 @@ simplifyAirports <-
            threshold_distanceInfrastructure = 2500, threshold_outline = 0.5, 
            threshold_area = 20000, rbind = TRUE) {
     
-    source("R/functions_internal_postProcessing.R", local = TRUE)
-    
     descSearch <- "irport|elipad"
     
     dt <- dg %>% dplyr::filter(str_detect(desc, descSearch))
@@ -649,8 +642,6 @@ simplifyAirports <-
 simplifyTreatment <- 
   function(dg,  distance = 1000, maxIterations = 100, rbind = TRUE) {
     
-    source("R/functions_internal_simplifyPoints.R", local = TRUE)
-    
     waterKey <- 
       c("Buildings; Pumping station", 
         "Wastewater; Sanitary dump", 
@@ -683,8 +674,6 @@ simplifyTreatment <-
 simplifyVenues <- 
   function(dg, descSearch = "Exhibition", distance = 1, 
            maxIterations = 100, rbind = TRUE) {
-    
-    source("R/functions_internal_simplifyPoints.R", local = TRUE)
     
     output <- 
       dg %>% 
