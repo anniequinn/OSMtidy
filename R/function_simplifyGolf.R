@@ -1,8 +1,6 @@
 simplifyGolf <-
   function (dg, descSearch = "golf", maxIterations = 100, rbind = TRUE) {
     
-    source("R/functions_internal_simplifyIntersects.R", local = TRUE)
-    
     output <- 
       dg %>% 
       dplyr::filter(str_detect(str_to_lower(desc), str_to_lower(descSearch))) %>% 

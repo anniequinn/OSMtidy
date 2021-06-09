@@ -2,8 +2,6 @@ simplifyVenues <-
   function(dg, descSearch = "Exhibition",  distance = 1, 
            maxIterations = 100, rbind = TRUE) {
     
-    source("R/functions_internal_simplifyPoints.R", local = TRUE)
-    
     output <- 
       dg %>% 
       dplyr::filter(str_detect(desc, descSearch)) %>%

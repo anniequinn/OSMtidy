@@ -2,9 +2,7 @@ simplifyAirports <-
   function(dg, threshold_distanceBuildings = 1000, 
            threshold_distanceInfrastructure = 2500, threshold_outline = 0.5, 
            threshold_area = 20000, rbind = TRUE) {
-    
-    source("R/functions_internal_postProcessing.R", local = TRUE)
-    
+
     descSearch <- "irport|elipad"
     
     dt <- dg %>% dplyr::filter(str_detect(desc, descSearch))

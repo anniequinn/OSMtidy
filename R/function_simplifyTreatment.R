@@ -1,8 +1,6 @@
 simplifyTreatment <- 
   function(dg, distance = 1000, maxIterations = 100, rbind = TRUE) {
-    
-    source("R/functions_internal_simplifyPoints.R", local = TRUE)
-    
+
     waterKey <- 
       c("Buildings; Pumping station", 
         "Wastewater; Sanitary dump", 
