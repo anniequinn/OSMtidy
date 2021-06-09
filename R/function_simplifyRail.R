@@ -1,13 +1,11 @@
-simplifyRail <- function(dg,
-                         descSearch = "Rail station",
-                         descNew = "Public transport; Rail station",
-                         threshold_distance = 1000,
-                         threshold_area = 1000,
-                         maxIterations = 100,
-                         rbind = TRUE) {
+simplifyRail <- 
+  function(dg, descSearch = "Rail station",
+           descNew = "Public transport; Rail station",
+           threshold_distance = 1000, threshold_area = 1000,
+           maxIterations = 100, rbind = TRUE) {
 
-  source("functions/functions_internal_postProcessing.R", local = TRUE)
-  source("functions/functions_internal_simplifyPoints.R", local = TRUE)
+  source("R/functions_internal_postProcessing.R", local = TRUE)
+  source("R/functions_internal_simplifyPoints.R", local = TRUE)
 
   output <-
     dg %>%
