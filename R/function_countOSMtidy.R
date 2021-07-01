@@ -1,5 +1,7 @@
 countOSMtidy <- function(dg) {
 
+  # By category
+  
   count_category_type <- 
     dg %>% 
     countType(group = quo(category_mod)) %>%
@@ -13,6 +15,8 @@ countOSMtidy <- function(dg) {
     ungroup
   
   
+  # By Urban Systems Abstraction Hierarchy physical object
+  
   count_physicalObject_type <-
     dg %>% countType(group = quo(physicalObject))
   
@@ -23,6 +27,8 @@ countOSMtidy <- function(dg) {
     summarise_each(funs(sum)) %>%
     ungroup
   
+  
+  # By desc
   
   count_desc_type <-
     dg %>% countType(group = quo(desc))
@@ -39,6 +45,11 @@ countOSMtidy <- function(dg) {
     list(count_category_all, count_category_type, 
          count_physicalObject_all, count_physicalObject_type, 
          count_desc_all, count_desc_type)
+  
+  names(output) <- 
+    c("byCategory_all", "byCategory_byType", 
+      "byPhysicalObject_all", "byPhysicalObject_byType",
+      "byDesc_all", "byDesc_byType")
   
   return(output)
   
