@@ -1,8 +1,8 @@
 countType <- function(dg, 
                       group, 
-                      USAH = FALSE) {
+                      AHgen = FALSE) {
   
-  if(USAH = FALSE) {
+  if(AHgen == FALSE) {
     
     output <-
       dg %>%
@@ -16,9 +16,7 @@ countType <- function(dg,
                 length = sum(length, na.rm = TRUE)) %>%
       ungroup
     
-  }
-  
-  if(USAH = TRUE) {
+  } else if(AHgen == TRUE) {
     
     output <-
       dg %>%

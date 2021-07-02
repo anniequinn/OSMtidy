@@ -1,12 +1,14 @@
-countOSMtidy <- function(dg, USAH = FALSE) {
+countOSMtidy <- function(dg, AHgen = FALSE) {
   
-  if(USAH = FALSE) {
+  output <- list()
+  
+  if(AHgen == FALSE) {
     
     # By desc
     
     count_desc_type <-
       dg %>% 
-      countType(group = quo(desc))
+      countType(group = quo(desc), AHgen = FALSE)
     
     count_desc_all <-
       count_desc_type %>%
@@ -21,15 +23,13 @@ countOSMtidy <- function(dg, USAH = FALSE) {
     names(output) <- 
       c("byDesc_all", "byDesc_byType")
     
-  }
-  
-  if(USAH = TRUE) {
+  } else if(AHgen == TRUE) {
     
     # By category
     
     count_category_type <- 
       dg %>% 
-      countType(group = quo(category_mod)) %>%
+      countType(group = quo(category_mod), AHgen = TRUE) %>%
       rename(category = category_mod)
     
     count_category_all <-
@@ -43,7 +43,7 @@ countOSMtidy <- function(dg, USAH = FALSE) {
     # By Urban Systems Abstraction Hierarchy physical object
     
     count_physicalObject_type <-
-      dg %>% countType(group = quo(physicalObject))
+      dg %>% countType(group = quo(physicalObject), AHgen = TRUE)
     
     count_physicalObject_all <-
       count_physicalObject_type %>%
@@ -56,7 +56,7 @@ countOSMtidy <- function(dg, USAH = FALSE) {
     # By desc
     
     count_desc_type <-
-      dg %>% countType(group = quo(desc))
+      dg %>% countType(group = quo(desc), AHgen = TRUE)
     
     count_desc_all <-
       count_desc_type %>%
