@@ -1,6 +1,11 @@
 makeValid <- 
   function(dg) {
 
+    # https://github.com/r-spatial/sf/issues/1649
+    # https://r-spatial.github.io/sf/articles/sf7.html
+    # sf::sf_use_s2()
+    sf::sf_use_s2(FALSE) # Until review for updated sf/s2 S^2 spherical space, revert to R^2 flat space
+    
   output <-
     tryCatch(
       dg %>%
@@ -70,7 +75,9 @@ makeValid <-
 }
 
 simplifyIntersects <- 
-  function(input, descNew = NA, maxIterations = 100) {
+  function(input, 
+           descNew = NA, 
+           maxIterations = 100) {
     
     if ((nrow(input) == 1) == TRUE) {
       print("In this data there is 1 or fewer point data entries for 'Airport; Aerodrome, terminal and gates' or 'Transport infrastructure; Airport apron, runways and taxiways' to simplify.")
@@ -178,7 +185,10 @@ simplifyIntersects <-
   }
 
 simplifyGolf <-
-  function (dg, descSearch = "golf", maxIterations = 100, rbind = TRUE) {
+  function (dg, 
+            descSearch = "golf", 
+            maxIterations = 100, 
+            rbind = TRUE) {
     
     output <- 
       dg %>% 
@@ -201,10 +211,13 @@ simplifyGolf <-
   }
 
 simplifyRail <- 
-  function(dg, descSearch = "Rail station", 
+  function(dg, 
+           descSearch = "Rail station", 
            descNew = "Public transport; Rail station", 
-           threshold_distance = 1000, threshold_area = 1000,
-           maxIterations = 100, rbind = TRUE) {
+           threshold_distance = 1000, 
+           threshold_area = 1000,
+           maxIterations = 100, 
+           rbind = TRUE) {
     
     output <-
       dg %>%
@@ -232,7 +245,10 @@ simplifyRail <-
   }
 
 simplifyPoints <- 
-  function(input, descNew = NA, distance = 1000, maxIterations = 100) {
+  function(input, 
+           descNew = NA, 
+           distance = 1000, 
+           maxIterations = 100) {
     
     distance <- units::set_units(distance, "m")
     
@@ -328,7 +344,9 @@ simplifyPoints <-
     
   }
 
-function_thresholdRail <- function(input, threshold = 1000) {
+function_thresholdRail <- 
+  function(input, 
+           threshold = 1000) {
 
   input %>%
     mutate(area = st_area(geometry) %>% as.numeric,
@@ -340,7 +358,8 @@ function_thresholdRail <- function(input, threshold = 1000) {
 }
 
 function_groupAirports <- 
-  function(input = dt, threshold = 1000) {
+  function(input = dt, 
+           threshold = 1000) {
     
     dl <- input %>% dplyr::filter(type != "POINT") %>% split(., .$desc)
     
@@ -400,7 +419,8 @@ function_groupAirports <-
   }
 
 function_airportBoundaries <- 
-  function(input, threshold = 0.5) {
+  function(input, 
+           threshold = 0.5) {
     
     if (is.null(input$grouped) == TRUE) {
       
@@ -453,7 +473,8 @@ function_airportBoundaries <-
   }
 
 function_thresholdArea <- 
-  function(input, thresholdArea = 20000) {
+  function(input, 
+           thresholdArea = 20000) {
   
   if (is.null(input$airportGroup) == TRUE) {
     
@@ -504,7 +525,10 @@ function_thresholdArea <-
 }
 
 function_groupAirportInfrastructure <- 
-  function(input, airports, airportsTidy, threshold = 2500) {
+  function(input, 
+           airports, 
+           airportsTidy, 
+           threshold = 2500) {
     
     check <- input %>% dplyr::filter(type != "POINT") %>% split(., .$desc)
     
@@ -581,9 +605,12 @@ function_groupAirportInfrastructure <-
   }
 
 simplifyAirports <- 
-  function(dg, threshold_distanceBuildings = 1000, 
-           threshold_distanceInfrastructure = 2500, threshold_outline = 0.5, 
-           threshold_area = 20000, rbind = TRUE) {
+  function(dg, 
+           threshold_distanceBuildings = 1000, 
+           threshold_distanceInfrastructure = 2500, 
+           threshold_outline = 0.5, 
+           threshold_area = 20000, 
+           rbind = TRUE) {
     
     descSearch <- "irport|elipad"
     
@@ -640,7 +667,10 @@ simplifyAirports <-
   }
 
 simplifyTreatment <- 
-  function(dg,  distance = 1000, maxIterations = 100, rbind = TRUE) {
+  function(dg,  
+           distance = 1000, 
+           maxIterations = 100, 
+           rbind = TRUE) {
     
     waterKey <- 
       c("Buildings; Pumping station", 
@@ -672,8 +702,11 @@ simplifyTreatment <-
   }
 
 simplifyVenues <- 
-  function(dg, descSearch = "Exhibition", distance = 1, 
-           maxIterations = 100, rbind = TRUE) {
+  function(dg, 
+           descSearch = "Exhibition", 
+           distance = 1, 
+           maxIterations = 100, 
+           rbind = TRUE) {
     
     output <- 
       dg %>% 
@@ -696,7 +729,9 @@ simplifyVenues <-
   }
 
 exportOSMtidy <- 
-  function(dg, locationName, type = c(".RDS", ".csv", ".shp")) {
+  function(dg, 
+           locationName, 
+           type = c(".RDS", ".csv", ".shp")) {
 
   prefix <- paste0(locationName, "_postProcessing")
 

@@ -1,7 +1,10 @@
 simplifyAirports <- 
-  function(dg, threshold_distanceBuildings = 1000, 
-           threshold_distanceInfrastructure = 2500, threshold_outline = 0.5, 
-           threshold_area = 20000, rbind = TRUE) {
+  function(dg, 
+           threshold_distanceBuildings = 1000, 
+           threshold_distanceInfrastructure = 2500, 
+           threshold_outline = 0.5, 
+           threshold_area = 20000, 
+           rbind = TRUE) {
 
     descSearch <- "irport|elipad"
     
