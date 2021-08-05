@@ -2,7 +2,7 @@ exportOSMtidy <- function(dg,
                           path,
                           name,
                           sf = TRUE,
-                          ext = c(".RDS", ".csv", ".shp")) {
+                          ext) {
   
   require(sf)
   
