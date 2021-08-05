@@ -1,28 +1,28 @@
 exportOSMtidy <- function(dg, 
-                          locationName, 
                           path,
+                          name,
+                          sf = TRUE,
                           ext = c(".RDS", ".csv", ".shp")) {
   
   require(sf)
   
-  # Create vector of dg class(es)
-  class <- class(dg) %>% as.vector()
-  
-  if("sf" %in% class) { # If dg class includes "sf" (simple feature)
+  if(sf == FALSE) {
     
-    dg <- 
-      dg %>% 
-      as.data.frame() %>% 
-      mutate(type = sf::st_geometry_type(geometry), # Add column for geometry type
-             geometry = sf::st_as_text(geometry)) # Reformat geometry as character class for speedier wrangling
-    
-  } else {
-    
-    dg <- dg %>% as.data.frame()
-    
-  }
-  
-  prefix <- paste0(path, locationName, "_postProcessing") 
+      dg <- 
+        dg %>% 
+        as.data.frame() %>% 
+        mutate(type = sf::st_geometry_type(geometry), # Add column for geometry type
+               geometry = sf::st_as_text(geometry)) # Reformat geometry as character class for speedier wrangling
+      
+      prefix <- paste0(path, name, "_postProcessing_non-sf")
+      
+    } else if(sf == TRUE) {
+      
+      dg <- dg %>% as.data.frame()
+      
+      prefix <- paste0(path, name, "_postProcessing_sf")
+      
+    }
   
   if(ext == ".RDS") {
     
