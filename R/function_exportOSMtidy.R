@@ -14,13 +14,13 @@ exportOSMtidy <- function(dg,
         mutate(type = sf::st_geometry_type(geometry), # Add column for geometry type
                geometry = sf::st_as_text(geometry)) # Reformat geometry as character class for speedier wrangling
       
-      prefix <- paste0(path, name, "_postProcessing_non-sf")
+      prefix <- paste0(path, name, "_7_postProcessing_non-sf")
       
     } else if(sf == TRUE) {
       
       dg <- dg %>% as.data.frame()
       
-      prefix <- paste0(path, name, "_postProcessing_sf")
+      prefix <- paste0(path, name, "_7_postProcessing_sf")
       
     }
   
