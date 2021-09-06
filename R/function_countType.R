@@ -2,6 +2,11 @@ countType <- function(dg,
                       group, 
                       AHgen = FALSE) {
   
+  # https://github.com/r-spatial/sf/issues/1649
+  # https://r-spatial.github.io/sf/articles/sf7.html
+  # sf::sf_use_s2()
+  sf::sf_use_s2(FALSE) # Until review for updated sf/s2 S^2 spherical space, revert to R^2 flat space
+  
   if(AHgen == FALSE) {
     
     output <-
