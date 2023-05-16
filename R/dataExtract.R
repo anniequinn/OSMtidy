@@ -1,6 +1,7 @@
-dataExtract <- function(dataShapefile, features = NULL,
+dataExtract <- function(dataShapefile, 
+                        mode = "default", featureList = NULL,
                         timeout = 300, memsize = 1073741824) {
-
+  
   # -------------------------------------------------------------------------
   # STEP ONE - SETUP --------------------------------------------------------
   # -------------------------------------------------------------------------
@@ -16,8 +17,17 @@ dataExtract <- function(dataShapefile, features = NULL,
   multipolygons <- list()
 
   # Prepare features
-  if(is.null(features)) { data("features"); features }
+  if(mode == "default" & is.null(featureList)) { 
+    data("features"); features 
+    }
+  else if(mode == "custom" & !is.null(featureList)) {
+    features <- featureList
+    }
+  
   nVec <- length(features)
+  
+  # Prepare bounding box coordinates
+  bbox <- dataShapefile %>% st_bbox()
 
 
   # -------------------------------------------------------------------------
@@ -33,15 +43,15 @@ dataExtract <- function(dataShapefile, features = NULL,
   for(i in 1:nVec) {
 
     tmp <-
-      dataShapefile %>%
+      bbox %>%
       opq(timeout = timeout, memsize = memsize) %>%
-      add_osm_feature(features[i]) %>%
-      osmdata_sf(quiet = TRUE)
+      add_osm_feature(key = features[i]) %>%
+      osmdata_sf(quiet = FALSE)
 
     Sys.sleep(0.2)
 
     progressText <-
-      paste0("feature = ", features[[i]], ", ",
+      paste0("feature = ", features[i], ", ",
              i, " out of ", nVec, " (", round(i / nVec * 100, digits = 2), "%)",
              "; elapsed = ", difftime(Sys.time(), start, units = "mins") %>%
                as.double(units = "mins") %>%
@@ -49,19 +59,19 @@ dataExtract <- function(dataShapefile, features = NULL,
     message(progressText)
 
     points[[features[i]]] <- tryCatch({
-      tmp$osm_points %>% as.data.table %>% mutate(feature := features[[i]])
+      tmp$osm_points %>% as.data.table %>% mutate(feature = features[i])
       }, error = function(e) NULL)
     lines[[features[i]]] <- tryCatch({
-      tmp$osm_lines %>% as.data.table %>% mutate(feature := features[[i]])
+      tmp$osm_lines %>% as.data.table %>% mutate(feature = features[i])
       }, error = function(e) NULL)
     polygons[[features[i]]] <- tryCatch({
-      tmp$osm_polygons %>% as.data.table %>% mutate(feature := features[[i]])
+      tmp$osm_polygons %>% as.data.table %>% mutate(feature = features[i])
       }, error = function(e) NULL)
     multilines[[features[i]]] <- tryCatch({
-      tmp$osm_multilines %>% as.data.table %>% mutate(feature := features[[i]])
+      tmp$osm_multilines %>% as.data.table %>% mutate(feature = features[i])
       }, error = function(e) NULL)
     multipolygons[[features[i]]] <- tryCatch({
-      tmp$osm_multipolygons %>% as.data.table %>% mutate(feature := features[[i]])
+      tmp$osm_multipolygons %>% as.data.table %>% mutate(feature = features[i])
       }, error = function(e) NULL)
 
     rm(tmp)
@@ -81,7 +91,7 @@ dataExtract <- function(dataShapefile, features = NULL,
   polygons <- polygons %>% .rmEmptyList %>% .rmNullList()
   multilines <- multilines %>% .rmEmptyList %>% .rmNullList()
   multipolygons <- multipolygons %>% .rmEmptyList %>% .rmNullList()
-
+  
   # Join together to form a master list
   output <- list(points = points,
                  lines = lines,

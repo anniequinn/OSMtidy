@@ -10,6 +10,10 @@ dataCut <- function(dataExtracted, dataShapefile) {
   message(paste0(timeStamp, "Step one of four"))
   # -------------------------------------------------------------------------
 
+  # Turn off spherical geometry
+  # Note: https://stackoverflow.com/questions/68808238/how-to-fix-spherical-geometry-errors-caused-by-conversion-from-geos-to-s2
+  sf_use_s2(FALSE)
+  
   pboptions(char = "=", type = "timer", style = 1)
 
   dt <- dataExtracted %>% flatten() %>% modify(. %>% as_tibble)
