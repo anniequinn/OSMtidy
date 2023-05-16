@@ -224,6 +224,7 @@ dataSummary <- function(data) {
 
   }
 
+  class(output) <- c(class(output), "OSMtidy_dataSummary")
   return(output)
 
 }

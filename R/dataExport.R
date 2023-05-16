@@ -1,6 +1,7 @@
 dataExport <- function(data, name = NULL, directory = NULL) {
 
   if(!class(data) %in% c("OSMtidy_filterOverview",
+                         "OSMtidy_dataSummary",
                          "OSMtidy_dataShapefile",
                          "OSMtidy_dataExtract",
                          "OSMtidy_dataCut",
@@ -28,7 +29,51 @@ dataExport <- function(data, name = NULL, directory = NULL) {
 
   }
 
+  
+  # -------------------------------------------------------------------------
+  # dataSummary -------------------------------------------------------------
+  # -------------------------------------------------------------------------
+  if(class(data) %in% "OSMtidy_dataSummary" %>% sum) {
+    
+    fileRDS <- paste0(name, "_dataSummary_", format(Sys.time(), "%Y%m%d-%H%M%S"), ".RDS")
+    fileXLSX <- paste0(name, "_dataSummary_", format(Sys.time(), "%Y%m%d-%H%M%S"), ".xlsx")
+    
+    if(!is.null(directory)) {
+      fileRDS <- paste0(directory, "/", fileRDS)
+      fileXLSX <- paste0(directory, "/", fileXLSX)
+    }
+    
+    data %>% saveRDS(fileRDS)
+    
+    require(openxlsx)
+    wb <- openxlsx::createWorkbook()
 
+    dataXLSX <- data[-1]
+    sheetnames <- names(dataXLSX)
+    
+    Map(function(dataXLSX, nameofsheet){
+      
+      openxlsx::addWorksheet(wb, nameofsheet)
+      openxlsx::writeDataTable(wb, nameofsheet, dataXLSX, rowNames = FALSE)
+      
+    }, dataXLSX, sheetnames)
+    
+    openxlsx::saveWorkbook(wb, file = fileXLSX)
+    
+    fileNames <-
+      lapply(c("fileRDS", "fileXLSX"), function(x) {
+        tryCatch(get(x), error = function(e) NULL)
+      }) %>%
+      .rmNullList %>%
+      unlist()
+    
+    message(paste0("Files saved as: "))
+    message(paste0("\n\t", fileNames))
+    
+    
+  }
+  
+  
   # -------------------------------------------------------------------------
   # dataShapefile, dataExtract, dataCut -----------------------------------------
   # -------------------------------------------------------------------------
