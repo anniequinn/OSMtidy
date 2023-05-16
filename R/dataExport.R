@@ -9,6 +9,8 @@ dataExport <- function(data, name = NULL, directory = NULL) {
                          "OSMtidy_dataTidy") %>% sum) {
     stop("class(data) is not of type OSMtidy")
   }
+  
+  require(OSMtidy)
 
 
   # -------------------------------------------------------------------------
@@ -64,7 +66,7 @@ dataExport <- function(data, name = NULL, directory = NULL) {
 
     if(!is.null(directory)) {
       fileWrangled <- paste0(directory, "/", fileWrangled)
-      fileNoDetail <- paste0(directory, "/", fileWrangled)
+      fileNoDetail <- paste0(directory, "/", fileNoDetail)
     }
 
     data %>% saveRDS(fileWrangled)
