@@ -68,4 +68,4 @@ The development of OSMtidy is funded by UKRI EPSRC as part of Professor Lindsay 
 
 **Contact** If you have any questions about using or running the code, or wish to access pre-filtered outputs for UK city locations, please contact m.bedinger@hw.ac.uk. 
 
-**Please cite** Visser-Quinn et al. (2021) OSMtidy V0.0.5, Edinburgh, Scotland. doi: 10.5281/zenodo.4549249 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4549249.svg)](https://doi.org/10.5281/zenodo.4549249)
+**Please cite** Visser-Quinn et al. (2023) OSMtidy V0.0.6, Edinburgh, Scotland. doi: 10.5281/zenodo.7957953 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7957953.svg)](https://doi.org/10.5281/zenodo.7957953)
