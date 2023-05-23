@@ -1,11 +1,13 @@
 Package: OSMtidy
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.0.43
-Author: Dr Annie Visser-Quinn <a.visser-quinn@hw.ac.uk> and Dr Melissa Bedinger <m.bedinger@hw.ac.uk>
-Maintainer: Dr Annie Visser-Quinn <a.visser-quinn@hw.ac.uk>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Title: OSMtidy is an R package for anyone who needs to tidy Open Street Map data into a concise yet complex geospatial dataset with a consistent naming convention.
+Version: 0.0.6
+Author: Dr Annie Visser-Quinn <a.visser-quinn@hw.ac.uk> and Dr Melissa Bedinger <m.bedinger@ed.ac.uk>
+Maintainer: Dr Annie Visser-Quinn <a.visser-quinn@hw.ac.uk> and Dr Melissa Bedinger <m.bedinger@ed.ac.uk>
+Description: OSMtidy is a software code, created in R. 
+    With OSMtidy, large messy OpenStreetMaps data can be quickly tidied into a streamlined dataset with a simple naming convention. 
+    OSMtidy can be applied at any scale, from a small village to cities the size of London.
+    OSMtidy is for anyone who needs a concise yet complex geospatial dataset with a consistent naming convention.
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
