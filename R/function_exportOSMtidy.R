@@ -1,8 +1,4 @@
-exportOSMtidy <- function(dg, 
-                          directory,
-                          name,
-                          sf = TRUE,
-                          ext) {
+exportOSMtidy <- function(dg, directory, name, sf = TRUE, ext) {
   
   require(sf)
   
