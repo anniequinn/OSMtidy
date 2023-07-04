@@ -7,7 +7,9 @@ dataExport <- function(data, name = NULL, directory = NULL) {
                          "OSMtidy_dataCut",
                          "OSMtidy_dataWrangle",
                          "OSMtidy_dataFilter",
-                         "OSMtidy_dataTidy") %>% sum) {
+                         "OSMtidy_dataTidy",
+                         "OSMtidy_count",
+                         "OSMtidy_countCompared") %>% sum) {
     stop("class(data) is not of type OSMtidy")
   }
   
@@ -308,5 +310,9 @@ dataExport <- function(data, name = NULL, directory = NULL) {
     message(paste0("\n\t", fileNames))
 
   }
+  
+  # -------------------------------------------------------------------------
+  # dataFilter --------------------------------------------------------------
+  # -------------------------------------------------------------------------
 
 }

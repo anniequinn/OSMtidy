@@ -83,6 +83,8 @@ countOSMtidy <- function(dg, AHgen = FALSE) {
     
   }
   
+  class(output) <- "OSMtidy_count"
+  
   return(output)
   
 }
