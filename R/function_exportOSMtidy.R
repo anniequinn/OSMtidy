@@ -40,7 +40,7 @@ exportOSMtidy <- function(dg, directory, name, sf = TRUE, ext) {
     
     vec <- c("POINT", "LINESTRING", "POLYGON")
     
-    if(colnames(dg) %in% "desc") {colsSelect <- c("desc", "geometry")}
+    if(any(colnames(dg) %in% "desc")) {colsSelect <- c("desc", "geometry")}
     else {colsSelect <- colnames(dg)}
     
     filename <- 
@@ -52,7 +52,7 @@ exportOSMtidy <- function(dg, directory, name, sf = TRUE, ext) {
         
         dg %>% 
           filter(str_detect(type, x)) %>% 
-          select(colsSelect) %>% 
+          select(all_of(colsSelect)) %>% 
           st_write(filename, quiet = TRUE)
         
         return(filename)
