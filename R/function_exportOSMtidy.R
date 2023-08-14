@@ -38,7 +38,10 @@ exportOSMtidy <- function(dg, directory, name, sf = TRUE, ext) {
   
   if(ext == ".shp") {
     
-    vec = c("POINT", "LINESTRING", "POLYGON")
+    vec <- c("POINT", "LINESTRING", "POLYGON")
+    
+    if(colnames(dg) %in% "desc") {colsSelect <- c("desc", "geometry")}
+    else {colsSelect <- colnames(dg)}
     
     filename <- 
       
@@ -49,7 +52,7 @@ exportOSMtidy <- function(dg, directory, name, sf = TRUE, ext) {
         
         dg %>% 
           filter(str_detect(type, x)) %>% 
-          select(desc, geometry) %>% 
+          select(colsSelect) %>% 
           st_write(filename, quiet = TRUE)
         
         return(filename)
